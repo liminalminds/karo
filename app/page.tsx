@@ -2,8 +2,9 @@
 
 import "crypto";
 import {useState, useRef, useEffect} from 'react';
-import Topic from '@components/Topic';
-import Item from  "@components/Item";
+import { FaHandPointRight } from "react-icons/fa6";
+import { RiDeleteBin6Fill } from "react-icons/ri";
+import { ImCheckboxChecked, ImCheckboxUnchecked } from "react-icons/im";
 
 interface Topic {
 	id: string,
@@ -17,9 +18,15 @@ interface Item {
 	completed: boolean,
 }
 
+const commonClassName = 'px-3 py-3 text-center font-semibold text-2xl text-ellipsis o-verflow-hidden my-2 flex items-center justify-between'
+const selectedClassName = 'border-black border-2 rounded-[30px]';
+const selectedColor = ' bg-[color:var(--bg-topic)]';
+const unselectedClassName = 'hover:cursor-pointer bg-[color:var(--bg-nav)]';
+const unselectedColor = ' bg-[color:var(--bg-nav)]';
+
 const App = () => {
 
-	const itemRef = useRef<HTMLInputElement | null>(null);
+	const itemRef  = useRef<HTMLInputElement | null>(null);
 	const topicRef = useRef<HTMLInputElement | null>(null);
 	const initialRender = useRef(true);
 
@@ -46,6 +53,8 @@ const App = () => {
 		window.localStorage.setItem('jdi_todo_app_selected', JSON.stringify(selected));
 	}, [dataState, selected]);
 
+	const generateId = (prefix: string) => prefix + "_" + crypto.randomUUID().toString().replaceAll('-','');
+
 	const getItems = (topicId: string) => {
 		for (let i = 0; i < dataState.length; i++) {
 			if (dataState[i].id === topicId) {
@@ -55,6 +64,7 @@ const App = () => {
 		return [];
 	};
 
+	/*
 	const editItem = (itemId:string, newTitle: string) => {
 		for (let i = 0; i < dataState.length; i++) {
 			if (dataState[i].id === selected) {
@@ -68,7 +78,20 @@ const App = () => {
 		}
 		setDataState([...dataState]);
 	};
+	*/
 
+	/*
+	const convertItemtoTopic = (itemName: string) => {
+		let topic = {
+			id: generateId('tpc'),
+			title: itemName,
+			items: [],
+		};
+		setDataState([...dataState, topic]);
+	};
+	*/
+
+	/*
 	const renameTopic = (topicId: string, topicName: string) => {
 		for (let i = 0; i < dataState.length; i++) {
 			if (dataState[i].id === topicId) {
@@ -78,9 +101,9 @@ const App = () => {
 		}
 		setDataState([...dataState]);
 	}
+	*/
 
-	const generateId = (prefix: string) => prefix + "_" + crypto.randomUUID().toString().replaceAll('-','');
-
+	/*
 	const clearCompleteItems = (all:boolean) => {
 		for (let i = 0; i < dataState.length; i++) {
 			if (dataState[i].id === selected && !all) {
@@ -88,10 +111,12 @@ const App = () => {
 			}
 		}
 	};
+	*/
 
 	const createTopic = () => {
 		if (topicRef.current == null) return;
 		if (topicRef.current.value === '') return;
+		console.log(topicRef.current.value);
 		const topicName = topicRef.current?.value;
 		let topic = {
 			id: generateId('tpc'),
@@ -109,7 +134,7 @@ const App = () => {
 		for (let i = 0; i < dataState.length; i++) {
 			if (dataState[i].id === topicId) {
 				dataState.splice(i, 1);
-				newSelect = dataState[i-1].id;
+				newSelect = dataState[i===0?i:i-1].id;
 				break;
 			}
 		}
@@ -187,14 +212,20 @@ const App = () => {
 					<section>
 						{dataState.map(topic => {
 							return (
-								<Topic
+								<div
 									key={topic.id}
-									id={topic.id}
-									title={topic.title.toUpperCase()}
-									selected={selected === topic.id}
 									onClick={() => selectTopic(topic.id)}
-									deleteTopic={deleteTopic}
-								/>
+									className={commonClassName  + ' ' + (selected === topic.id?selectedClassName + selectedColor:unselectedClassName + unselectedColor)}
+								>
+									<div className={'flex items-center gap-2' + (selected === topic.id?selectedColor:unselectedColor)}>
+										<FaHandPointRight/>
+										{topic.title}
+									</div>
+									<div className={'flex gap-3'}>
+										{/*<FaPencil className='float-right' onClick={() => {}} />*/}
+										<RiDeleteBin6Fill className='float-right' onClick={() => deleteTopic(topic.id)} />
+									</div>
+								</div>
 							)
 						})}
 					</section>
@@ -210,7 +241,7 @@ const App = () => {
 					onKeyDown={(e) => {if(e.key === 'Enter') createItem()}}
 					ref={itemRef}
 					className='relative w-full flex bg-[color:var(--bg-theme) items-center justify-center text-2xl p-3 bg-[color:var(--bg-nav)] shadow-[4px_6px_1px] border-2 border-black rounded-[30px] outline-none'
-					placeholder='Goals ...'
+					placeholder='Write an actionable item or a long term goal?'
 					type='text'
 				>
 				</input>
@@ -218,12 +249,25 @@ const App = () => {
 				<article>
 					{getItems(selected).map(item => {
 						return (
-						<Item
-							item={item}
-							toggle={toggleComplete}
-							deleteItem={deleteItem}
-							editItem={editItem}
-						/>
+							<div
+								key={item.id}
+								className={'my-4 p-3 flex text-center justify-between items-center text-2xl border-2 border-black rounded-[30px] shadow-[4px_6px_1px] bg-white'}
+							>
+								<div className='flex items-center gap-3 bg-white'>
+									<div className='bg-white' onClick={() => toggleComplete(item.id)}>
+										{item.completed && <ImCheckboxChecked />}
+										{!item.completed && <ImCheckboxUnchecked />}
+									</div>
+									<div className={item.completed?'line-through text-gray-700 bg-white':'bg-white'}>
+										{item.title}
+									</div>
+								</div>
+								<div className='flex gap-3 bg-white'>
+									{/*<FaPencil className='float-right bg-white' onClick={() => editItem(item.id)} />*/}
+									{/*<FaPencil className='float-right bg-white' onClick={() => editItem(item.id)} />*/}
+									<RiDeleteBin6Fill className='float-right bg-white' onClick={() => deleteItem(item.id)} />
+								</div>
+							</div>
 						)
 					})}
 				</article>
