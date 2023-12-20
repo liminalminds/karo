@@ -1,5 +1,8 @@
+import { Poppins } from 'next/font/google';
 import type { Metadata } from 'next'
-import './styles/globals.css'
+import '@styles/globals.css'
+
+const poppins = Poppins({weight:['400','600','700'], subsets:["latin"]});
 
 export const metadata: Metadata = {
   title: 'JDI: Todo App',
@@ -9,7 +12,7 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en">
-      <body className='m-0 p-0 box-border bg-black text-white'>{children}</body>
+      <body className={poppins.className}>{children}</body>
     </html>
   )
 }
