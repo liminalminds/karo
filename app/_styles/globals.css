@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+	--bg-theme:  #FCF4E7;
+	--bg-topic:  #E5E5E5;
+	--fg-topic:  #313D5C;
+	--cn-shadow: #2F2F2A;
+	--bg-nav:    #FFFFFF;
+	--fg-nav:    #2C3857;
+} 
+
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
