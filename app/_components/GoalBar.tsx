@@ -1,4 +1,3 @@
-"use client"
 import { useDataStore } from "@state/store"
 import Goal from "@components/Goal"
 

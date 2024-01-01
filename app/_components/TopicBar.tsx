@@ -1,11 +1,8 @@
-"use client"
 import Topic from "@components/Topic"
 import { useDataStore } from "@state/store"
 
 const TopicBar: React.FC = () => {
 	const topics = useDataStore((state) => state.data)
-	const selected = useDataStore(state => state.selected)
-	localStorage.setItem('JDI',JSON.stringify({data:topics,selected:selected}))
 	const selectTopic = useDataStore((state) => state.setSelected)
 	const onClick = (topicId: string) => selectTopic(topicId)
 	return (

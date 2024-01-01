@@ -1,3 +1,4 @@
+"use client"
 import "react-toastify/ReactToastify.css"
 import { ToastContainer } from "@components/Toast"
 import TopicBar from "@components/TopicBar"
@@ -5,8 +6,13 @@ import ActionBar from "@components/ActionBar"
 import GoalBar from "@components/GoalBar"
 import Menu from "@components/Menu"
 import { InputAction, InputTopic } from "@components/Input"
+import { useDataStore } from "@state/store"
+import { useEffect } from "react"
 
 const App: React.FC = () => {
+	useEffect(() => {
+		useDataStore.persist.rehydrate()
+	}, [])
 	return (
 		<main className='flex w-screen h-screen'>
 			<ToastContainer />
