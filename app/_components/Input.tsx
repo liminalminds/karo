@@ -1,4 +1,3 @@
-"use client"
 import { useRef } from "react"
 import { useDataStore } from "@state/store"
 import { generateId } from "@utils"

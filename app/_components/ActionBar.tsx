@@ -1,4 +1,3 @@
-"use client"
 import Action from "@components/Action"
 import { useDataStore } from "@state/store"
 import { IAction } from "@types"
