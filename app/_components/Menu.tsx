@@ -1,12 +1,15 @@
 import { FaFileImport, FaFloppyDisk, FaCircleInfo } from "react-icons/fa6"
 import { useDataStore } from "@state/store"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useState, useRef, useEffect } from "react"
 import AboutModal from "@components/AboutModal"
 
 const Menu: React.FC = () => {
 	const data = useDataStore((state) => state.data)
 	const setData = useDataStore((state) => state.setData)
 	const [aboutModal, toggleAboutModal] = useState<boolean>(false)
+	const ref = useRef(null)
+	useEffect(() => {
+	}, [])
 	const onClick = async (e: ChangeEvent<HTMLInputElement>) => {
 		let file = null
 		if (e.target.files) {
@@ -41,9 +44,11 @@ const Menu: React.FC = () => {
 			 <label htmlFor='import'><FaFileImport /></label>
 			 <input id='import' type='file' onChange={onClick} className='w-0 h-0 hidden'/>
 			</li>
-			<li><a href={getHref()} target='_blank' download='jdi_data.json'><FaFloppyDisk /></a></li>
+			<li><a href={getHref()} target='_blank' download='jdi_data.json' tabIndex={-1}><FaFloppyDisk /></a></li>
 			<li><FaCircleInfo onClick={() => toggleAboutModal(prev => !prev)}/></li>
+			<div ref={ref}>
 			{aboutModal && <AboutModal />}
+			</div>
 		</ul>
 	)
 }
