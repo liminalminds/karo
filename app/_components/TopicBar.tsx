@@ -6,7 +6,7 @@ const TopicBar: React.FC = () => {
 	const selectTopic = useDataStore((state) => state.setSelected)
 	const onClick = (topicId: string) => selectTopic(topicId)
 	return (
-		<nav className='relative text-center overflow-y-scroll bg-yellow-100 fg-[color:var(--fg-nav)]'>
+		<nav className='relative font-dyna-puff text-center overflow-y-scroll bg-yellow-100 fg-[color:var(--fg-nav)]'>
 			<ul className='mx-3'>
 				{topics.map(topic => {
 					return (

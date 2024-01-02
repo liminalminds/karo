@@ -23,6 +23,7 @@ export const InputTopic: React.FC = () => {
 	return (
 		<input
 			ref={topicRef}
+			enterKeyHint="enter"
 			onKeyDown={(e) => {if(e.key === 'Enter') onEnter()}}
 			className='px-3 outline-none w-full text-2xl'
 			placeholder='New Topic'
@@ -55,6 +56,7 @@ export const InputAction: React.FC = () => {
 	return (
 		<input
 			ref={actionRef}
+			enterKeyHint="enter"
 			onKeyDown={(e) => {if(e.key === 'Enter') onEnter()}}
 			className='px-3 outline-none w-full text-2xl'
 			placeholder='Write an action item ...'

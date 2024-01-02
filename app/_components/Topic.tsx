@@ -41,33 +41,34 @@ const Topic: React.FC<TopicProps> = ({
 		>
 			<span className='flex items-center gap-2'>
 				<div>
-				{goal && '🚀 '}
-				{!goal && <GiAbstract050 />}
+					<GiAbstract050 />
 				</div>
 				<div
 					spellCheck='false'
 					className='text-ellipsis outline-none uppercase'
 				>
-					{editModal  && <input
+					{editModal
+					? <input
 						ref={editModalRef}
 						type='text'
 						size={15}
 						placeholder='new name'
 						onKeyDown={(e) => { if (e.key === 'Enter') onEnter()}}
 						className='uppercase text-2xl outline-none bg-[color:var(--bg-topic)]'
-					/>}
-					{!editModal && title}
+					/>
+					: title}
 				</div>
 			</span>
 			<span className='flex items-center gap-2'>
 				<FaPencil
 					onClick={() => toggleEditModal((prev) => prev?false:true)}
-					style={editModal && {color: 'orange'}}
+					style={{color: editModal?'orange':'brown'}}
 					className='cursor-pointer'
 				/>
-				{goal && <span onClick={onConvert}>🎯</span>}
-				{!goal && <LuTarget onClick={onConvert} className='cursor-pointer'/>}
-				<RiDeleteBin6Fill onClick={onDelete} className='cursor-pointer'/>
+				{goal 
+				? <span onClick={onConvert}>🎯</span>
+				: <LuTarget onClick={onConvert} className='cursor-pointer text-green-600'/>}
+				<RiDeleteBin6Fill onClick={onDelete} className='cursor-pointer text-red-500'/>
 			</span>
 		</div>
 	)

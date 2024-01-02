@@ -18,8 +18,8 @@ const App: React.FC = () => {
 			<ToastContainer />
 			<nav id='topics' className='relative w-1/4 text-center overflow-y-scroll bg-yellow-100 fg-[color:var(--fg-nav)]'>
 				<header>
-					<h1 id='logo' className='my-4 font-semibold text-6xl'>
-						J D I
+					<h1 id='logo' className='my-4 font-dyna-puff text-6xl'>
+						JDI
 					</h1>
 					<div className='p-3 m-3 relative shadow-[4px_6px_1px] border-2 border-black rounded-[30px] bg-white'>
 						<InputTopic />
