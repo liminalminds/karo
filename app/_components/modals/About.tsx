@@ -1,6 +1,6 @@
-const AboutModal:React.FC = ():JSX.Element => {
+const About:React.FC = ():JSX.Element => {
 	return (
-		<article className='fixed z-50 top-1/4 p-10 overflow-hidden border-2 border-black rounded-[30px] shadow-[4px_6px_1px] bg-lime-200'>
+		<article className='fixed z-50 w-1/3 left-1/3 h-[300px] top-1/4 p-10 overflow-hidden border-2 border-white rounded-[30px] shadow-[4px_6px_1px] bg-gray-950 text-white'>
 			<h1 className='text-2xl font-dyna-puff uppercase'>ABOUT</h1>
 			<p className='text-xl mt-3 font-poppins'>
 				This is my ToDo list manager in NextJS.
@@ -13,4 +13,4 @@ const AboutModal:React.FC = ():JSX.Element => {
 	)
 }
 
-export default AboutModal
+export default About

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "allowJs": true,
+    "allowJs": false,
     "baseUrl": ".",
     "esModuleInterop": true,
     "incremental": true,
@@ -14,7 +14,7 @@
       "@/*": ["./*"],
       "@components/*": ["app/_components/*"],
       "@styles/*": ["app/_styles/*"],
-      "@state/*": ["app/_state/*"],
+      "@store": ["app/_store.ts"],
       "@types": ["app/_types.tsx"],
       "@utils": ["app/_utils.tsx"],
     },

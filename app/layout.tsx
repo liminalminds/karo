@@ -17,7 +17,7 @@ interface RootProps {
 const RootLayout = ({children}: RootProps) => {
   return (
     <html lang="en">
-      <body className={`${dynaPuff.variable} ${poppins.variable}`}>{children}</body>
+      <body className={`${dynaPuff.variable} ${poppins.variable} bg-black`}>{children}</body>
     </html>
   )
 }

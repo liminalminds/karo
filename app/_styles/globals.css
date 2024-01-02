@@ -8,7 +8,10 @@
 	--fg-topic:  #313D5C;
 	--cn-shadow: #2F2F2A;
 	--bg-nav:    #FFFFFF;
+	--bg-input:  #FFFFFF;
 	--fg-nav:    #2C3857;
+	--fg-goals:  #00FF00;
+	--fg-actions: #FF0000;
 } 
 
 *{
