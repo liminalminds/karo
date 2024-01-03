@@ -5,7 +5,7 @@ import Goal from "@components/goals/Goal"
 const GoalList: React.FC = () => {
 	const topics = useDataStore(state => state.topics).filter(topic => topic.goal)
 	return (
-		<aside className='w-1/4 h-screen bg-black text-white overflow-y-scroll'>
+		<aside className='w-1/4 h-screen bg-transparent text-white overflow-y-scroll'>
 			<ul className='m-4'>
 				{topics.map((topic) => {
 						return (

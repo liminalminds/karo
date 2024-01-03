@@ -17,7 +17,17 @@ interface RootProps {
 const RootLayout = ({children}: RootProps) => {
   return (
     <html lang="en">
-      <body className={`${dynaPuff.variable} ${poppins.variable} bg-black`}>{children}</body>
+      <body
+				className={`${dynaPuff.variable} ${poppins.variable}`}
+				style={{
+					backgroundImage: "url('/jdi-bg-2.webp')",
+					backgroundPosition: "center",
+					backgroundSize: "cover",
+					backgroundRepeat: "no-repeat",
+				}}
+			>
+				{children}
+			</body>
     </html>
   )
 }

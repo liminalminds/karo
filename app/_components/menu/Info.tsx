@@ -11,7 +11,7 @@ const Info: React.FC<InfoProps> = ({children}) => {
 	const onClick = () => toggle(prev => !prev)
 	return (
 		<Fragment>
-			<FaCircleInfo onClick={onClick} className='text-white'/>
+			<FaCircleInfo onClick={onClick} className='text-white hover:text-yellow-400 duration-300'/>
 			{modal && children}
 		</Fragment>
 	)

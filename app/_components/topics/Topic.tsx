@@ -38,7 +38,7 @@ const Topic: React.FC<TopicProps> = ({
 
 	return (
 		<div
-			className={'text-white items-center cusror-pointer flex flex-wrap overflow-hidden border-white border-2 rounded-[30px] relative text-2xl p-3 justify-between '.concat(selected?'bg-gray-900':'bg-black')}
+			className={'text-white items-center cusror-pointer flex flex-wrap overflow-hidden border-white border-2 rounded-[30px] relative text-2xl p-3 justify-between hover:bg-zinc-800 duration-200 hover:text-3xl '.concat(selected?'bg-zinc-800':'bg-transparent')}
 			onClick={() => selectTopic(id)}
 		>
 			<span className='flex items-center gap-2'>
@@ -51,12 +51,14 @@ const Topic: React.FC<TopicProps> = ({
 				>
 					{modal
 					? <input
+						autoFocus
 						ref={ref}
 						type='text'
 						size={15}
+						defaultValue={title}
 						placeholder='new name'
 						onKeyDown={onKeyDown}
-						className='uppercase text-2xl outline-none bg-black'
+						className='uppercase text-2xl outline-none bg-transparent'
 					/>
 					: title}
 				</div>

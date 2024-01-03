@@ -10,13 +10,18 @@ const Import: React.FC = () => {
 		if (e.target.files) file = e.target.files[0]
 		if (file) {
 			const fileTopics = JSON.parse(await file.text())
-			setTopics(fileTopics, confirm('Do you want to keep the existing data?'))
+			if (confirm('Do you want to keep the existing data?')) {
+				setTopics(fileTopics, false)
+			}
+			else {
+				setTopics(fileTopics, true)
+			}
 		}
 	}
 	return (
 		<Fragment>
-		 <label htmlFor='import'><FaFileImport className='text-white'/></label>
-		 <input type='file' onChange={onChange} className='w-0 h-0 hidden'/>
+		 <label htmlFor='import'><FaFileImport className='text-white hover:text-yellow-400 duration-300'/></label>
+		 <input id='import' type='file' onChange={onChange} className='w-0 h-0 hidden'/>
 	 </Fragment>
 	)
 }

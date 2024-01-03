@@ -6,7 +6,6 @@ import { ToastConfig } from "@components/toast"
 import { useDataStore } from "@store"
 
 export const InputAction: React.FC = (): JSX.Element => {
-	console.log('Input Action')
 	const createAction = useDataStore((state) => state.createAction)
 	const ref = useRef<HTMLInputElement>(null)
 	const onKeyDown = async (e: KeyboardEvent) => {
@@ -31,7 +30,7 @@ export const InputAction: React.FC = (): JSX.Element => {
 			ref={ref}
 			enterKeyHint="enter"
 			onKeyDown={onKeyDown}
-			className='px-3 outline-none w-full text-2xl bg-black'
+			className='px-3 outline-none w-full text-2xl bg-transparent'
 			placeholder='Write an action item ...'
 			type='text'
 		/>

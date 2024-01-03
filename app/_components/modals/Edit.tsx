@@ -18,7 +18,7 @@ const Edit: React.FC<EditProps> = ({defaultValue, placeholder, autoFocus, callba
 		<input
 			ref={ref}
 			type='text'
-			className='w-[32rem] text-2xl outline-none bg-black'
+			className='w-[32rem] text-2xl outline-none bg-transparent'
 			placeholder={placeholder}
 			onKeyDown={(e) => onKeyDown(e)}
 			defaultValue={defaultValue}

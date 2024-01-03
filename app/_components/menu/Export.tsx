@@ -8,14 +8,14 @@ const Export:React.FC = ():JSX.Element => {
 		let href = '#'
 		let blob = null
 		if (topics.length !== 0) {
-			blob = new Blob([JSON.stringify(topics)], {type: 'application/json'})
+			blob = new Blob([JSON.stringify(topics, null, 2)], {type: 'application/json'})
 			href = URL.createObjectURL(blob)
 		}
 		return href
 	}
 
 	return (
-		<a href={url()} target='_blank' download='jdi_data.json' tabIndex={-1}><FaFloppyDisk className='text-white'/></a>
+		<a href={url()} target='_blank' download tabIndex={-1}><FaFloppyDisk className='text-white hover:text-yellow-400 duration-300'/></a>
 	)
 }
 
