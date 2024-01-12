@@ -1,0 +1,13 @@
+# Node
+images/
+node_modules/
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Repo
+README.md
+.gitignore
+.next
+.git

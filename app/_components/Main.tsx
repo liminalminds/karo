@@ -18,7 +18,7 @@ const Main: React.FC<MainProps> = ({children}) => {
 				setSelected(state.selected)
 			}
 		}
-	}, [])
+	})
 	return (
 		<main className="flex w-screen h-screen bg-[rgba(0,0,0,0.7)]">
 			{children}
