@@ -14,6 +14,32 @@
 	--fg-actions: #FF0000;
 } 
 
+*::-webkit-scrollbar-thumb {
+	background: transparent;
+}
+
+*::-webkit-scrollbar {
+	max-width: 0.4rem;
+	max-height: 0.4rem;
+}
+
+*::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+	background: var(--accent);
+}
+
+*:hover::-webkit-scrollbar {
+	max-width: 0.4rem;
+	max-height: 0.4rem;
+}
+
+*:hover::-webkit-scrollbar-track {
+	background: var(--grey);
+}
+
 *{
 	margin: 0;
 	padding: 0;
