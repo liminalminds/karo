@@ -7,7 +7,7 @@ import Main from "@components/Main"
 
 const App: React.FC = () => {
 	return (
-		<Main className='top-1 text-l'>
+		<Main>
 			<ToastContainer />
 			<TopicBar />
 			<ActionBar />

@@ -129,7 +129,7 @@ export const useDataStore = create<State & Actions>()(
 				},
 		}),
 		{
-			name: 'JDI',
+			name: 'karo',
 			skipHydration:true,
 		}
 	)

@@ -11,7 +11,7 @@ const Main: React.FC<MainProps> = ({children}) => {
 	const setSelected = useDataStore(state => state.setSelected)
 	useEffect(() => {
 		if (localStorage != undefined) {
-			const data = localStorage.getItem("JDI")
+			const data = localStorage.getItem("karo")
 			if (data != null) {
 				const { state } = JSON.parse(data)
 				setTopics(state.topics, true)
@@ -20,7 +20,7 @@ const Main: React.FC<MainProps> = ({children}) => {
 		}
 	})
 	return (
-		<main className="flex w-screen h-screen bg-[rgba(0,0,0,0.7)]">
+		<main className="flex w-screen top-1 text-l h-screen bg-[rgba(0,0,0,0.7)]">
 			{children}
 		</main>
 	)
