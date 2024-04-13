@@ -1,5 +1,6 @@
 import { useDataStore } from "@store";
 import { FaCircleXmark } from "react-icons/fa6";
+import styles from './Close.module.css';
 
 interface CloseProps {
 	id: string;
@@ -10,10 +11,10 @@ const Close:React.FC<CloseProps> = ({id}) => {
 	const onClick = ():void => {confirm('Are you sure you want to delete this topic?') && deleteTopic(id)}
 	return (
 		<div
-			className='absolute top-4 right-4 cursor-pointer'
+			className={styles.close}
 			onClick={onClick}
 		>
-		<FaCircleXmark className='text-2xl'/>
+		<FaCircleXmark className={styles.icon}/>
 		</div>
 	)
 }

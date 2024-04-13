@@ -44,8 +44,8 @@ const Goal: React.FC<GoalProps> = ({
 	return (
 		<div className='flex flex-col items-center justify-center gap-5 p-10 relative overflow-hidden border-2 border-white rounded-[30px] shadow-[4px_6px_1px] bg-transparent text-white'>
 			{count === total && total !== 0 && <Close id={id}/>}
-			<h2 className='text-2xl font-dyna-puff text-purple-400'>{title}</h2>
-			<h3 className='text-xl font-dyna-puff text-blue-500'>{pct()}</h3>
+			<h2 className='text-2xl font-pixelify text-purple-400'>{title}</h2>
+			<h3 className='text-xl font-pixelify text-blue-500'>{pct()}</h3>
 			<h6 className='text-l text-center'>
 				Completed <strong>{count}</strong> of <strong>{total}</strong>
 			</h6>

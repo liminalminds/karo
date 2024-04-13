@@ -4,6 +4,7 @@ import { generateId } from "@utils"
 import { toast } from "react-toastify"
 import { ToastConfig } from "@components/toast"
 import { useDataStore } from "@store"
+import styles from "./Input.module.css"
 
 export const InputAction: React.FC = (): JSX.Element => {
 	const createAction = useDataStore((state) => state.createAction)
@@ -30,7 +31,7 @@ export const InputAction: React.FC = (): JSX.Element => {
 			ref={ref}
 			enterKeyHint="enter"
 			onKeyDown={onKeyDown}
-			className='px-3 outline-none w-full text-2xl bg-transparent'
+			className={styles.input}
 			placeholder='Write an action item ...'
 			type='text'
 		/>

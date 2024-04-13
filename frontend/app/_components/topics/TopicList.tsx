@@ -6,7 +6,7 @@ const TopicList: React.FC = () => {
 	const topics = useDataStore((state) => state.topics)
 	const selected = useDataStore((state) => state.selected)
 	return (
-		<div className='relative font-dyna-puff text-center overflow-y-scroll bg-transparent text-white'>
+		<div className='relative font-pixelify text-center overflow-y-scroll bg-transparent text-white'>
 			<ul className='mx-3'>
 				{topics.map(topic => {
 					return (

@@ -3,6 +3,7 @@ import { KeyboardEvent, useRef } from "react"
 import { generateId } from "@utils"
 import { ITopic } from "@types"
 import { useDataStore } from "@store"
+import styles from "./Input.module.css"
 
 export const InputTopic: React.FC = () => {
 	const createTopic = useDataStore(state => state.createTopic)
@@ -24,7 +25,7 @@ export const InputTopic: React.FC = () => {
 			ref={ref}
 			enterKeyHint="enter"
 			onKeyDown={onKeyDown}
-			className='px-3 outline-none w-full text-2xl bg-transparent'
+			className={styles.input}
 			placeholder='New Topic'
 			type='text'
 		/>

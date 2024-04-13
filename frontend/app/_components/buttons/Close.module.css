@@ -1,0 +1,11 @@
+.close{
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	cursor: pointer;
+}
+
+.icon{
+	font-size: 1.5rem;
+	line-height: 2rem;
+}

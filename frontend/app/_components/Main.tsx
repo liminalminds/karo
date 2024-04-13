@@ -1,6 +1,7 @@
 "use client"
 import { useEffect } from "react"
 import { useDataStore } from "@store"
+import styles from './Main.module.css'
 
 interface MainProps {
 	children:React.ReactNode
@@ -20,7 +21,7 @@ const Main: React.FC<MainProps> = ({children}) => {
 		}
 	})
 	return (
-		<main className="flex w-screen top-1 text-l h-screen bg-[rgba(0,0,0,0.7)]">
+		<main className={styles.main}>
 			{children}
 		</main>
 	)

@@ -1,0 +1,7 @@
+.header{
+	margin: 1rem 0;
+	font-family: var(--font-pixelify);
+	font-size: 3.75rem;
+	line-height: 1;
+	color: rgb(234 88 12);
+}

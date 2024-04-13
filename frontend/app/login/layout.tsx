@@ -1,6 +1,6 @@
 import { Pixelify_Sans } from 'next/font/google';
 import type { Metadata } from 'next'
-import './global.css'
+import '../global.css'
 
 const pixelify = Pixelify_Sans({
 	weight:['400','700'],
@@ -9,7 +9,7 @@ const pixelify = Pixelify_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Karo | Todo App',
+  title: 'Karo | Login',
   description: "A minimalist ToDo manager",
 }
 

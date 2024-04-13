@@ -14,6 +14,12 @@
 	--fg-actions: #FF0000;
 } 
 
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
 *::-webkit-scrollbar-thumb {
 	background: transparent;
 }
@@ -40,8 +46,9 @@
 	background: var(--grey);
 }
 
-*{
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+body{
+	background-image: url('/background.jpg');
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
 }
