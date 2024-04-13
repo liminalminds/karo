@@ -2,10 +2,6 @@
 
 *Just-Do-It: A minimalistic ToDo Manager*
 
-## Screenshot
-
-![screenshot](/images/screenshot.png)
-
 ## Development
 
 ```bash
