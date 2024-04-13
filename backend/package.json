@@ -1,0 +1,32 @@
+{
+  "name": "karo",
+  "version": "1.0",
+  "description": "Karp API",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc",
+    "predev": "npm run build",
+    "dev": "tsc -w & nodemon dist/app.js",
+    "preprod": "npm run build",
+    "prod": "node dist/app.js"
+  },
+  "keywords": [
+    "Karo",
+    "Express",
+    "Backend",
+    "API",
+    "Todo"
+  ],
+  "author": "Sunny Béta",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.7",
+    "nodemon": "^3.1.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "zod": "^3.22.4"
+  }
+}
