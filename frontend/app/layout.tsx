@@ -6,7 +6,7 @@ const dynaPuff= DynaPuff({weight:['400','600','700'], subsets:["latin"], variabl
 const poppins = Poppins({weight:['400'], subsets:["latin"], variable:'--font-poppins'});
 
 export const metadata: Metadata = {
-  title: 'JDI: Todo App',
+  title: 'Karo: Todo App',
   description: "A minimalist ToDo manager",
 }
 
@@ -20,7 +20,7 @@ const RootLayout = ({children}: RootProps) => {
       <body
 				className={`${dynaPuff.variable} ${poppins.variable}`}
 				style={{
-					backgroundImage: "url('/jdi-bg-2.webp')",
+					backgroundImage: "url('/background.jpg')",
 					backgroundPosition: "center",
 					backgroundSize: "cover",
 					backgroundRepeat: "no-repeat",

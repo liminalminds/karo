@@ -5,7 +5,7 @@ const About:React.FC = ():JSX.Element => {
 			<p className='text-xl mt-3 font-poppins'>
 				This is my ToDo list manager in NextJS.
 				<br/>
-				For feedbacks, please <a href='https://github.com/liminalminds/jdi' target='_blank' className='underline'>raise an issue</a> or write a quick <a href='mailto:liminalminds@protonmail.com' target='_blank' className='underline'>email</a>.
+				For feedbacks, please <a href='https://github.com/sunnybeta/karo' target='_blank' className='underline'>raise an issue</a> or write a quick <a href='mailto:sunnybeta@protonmail.com' target='_blank' className='underline'>email</a>.
 				<br/>
 				Happy Tasking.
 			</p>

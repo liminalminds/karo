@@ -15,7 +15,7 @@ const Export:React.FC = ():JSX.Element => {
 	}
 
 	return (
-		<a href={url()} target='_blank' download='jdi_data.json' tabIndex={-1}><FaFloppyDisk className='text-white hover:text-yellow-400 duration-300'/></a>
+		<a href={url()} target='_blank' download='kaam.json' tabIndex={-1}><FaFloppyDisk className='text-white hover:text-yellow-400 duration-300'/></a>
 	)
 }
 
