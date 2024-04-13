@@ -13,7 +13,6 @@
     "paths": {
       "@/*": ["./*"],
       "@components/*": ["app/_components/*"],
-      "@styles/*": ["app/_styles/*"],
       "@store": ["app/_store.ts"],
       "@types": ["app/_types.tsx"],
       "@utils": ["app/_utils.tsx"],

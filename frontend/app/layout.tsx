@@ -1,12 +1,16 @@
-import { DynaPuff, Poppins } from 'next/font/google';
-import type { Metadata } from 'next'
-import '@styles/globals.css'
+import { Pixelify_Sans } from "next/font/google";
+import type { Metadata } from "next"
+import "./global.css"
 
-const dynaPuff= DynaPuff({weight:['400','600','700'], subsets:["latin"], variable:'--font-dyna-puff'});
-const poppins = Poppins({weight:['400'], subsets:["latin"], variable:'--font-poppins'});
+const pixelify = Pixelify_Sans({
+	weight:["400","700"],
+	subsets:["latin"],
+	variable:"--font-pixelify",
+	display: "swap"
+})
 
 export const metadata: Metadata = {
-  title: 'Karo: Todo App',
+  title: "Karo v2 | Todo App",
   description: "A minimalist ToDo manager",
 }
 
@@ -15,21 +19,13 @@ interface RootProps {
 }
 
 const RootLayout = ({children}: RootProps) => {
-  return (
-    <html lang="en">
-      <body
-				className={`${dynaPuff.variable} ${poppins.variable}`}
-				style={{
-					backgroundImage: "url('/background.jpg')",
-					backgroundPosition: "center",
-					backgroundSize: "cover",
-					backgroundRepeat: "no-repeat",
-				}}
-			>
+	return (
+		<html lang="en">
+			<body className={`${pixelify.variable}`}>
 				{children}
 			</body>
-    </html>
-  )
+		</html>
+	)
 }
 
 export default RootLayout
