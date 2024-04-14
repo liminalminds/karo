@@ -193,9 +193,27 @@ main .tasks{
 	font-size: 0.5rem;
 }
 
+@keyframes strike-through {
+	0% {
+		width: 0;
+	}
+	100% {
+		width: 100%;
+	}
+}
+
 .tasks .done{
-	text-decoration: line-through;
+	position: relative;
 	color: var(--lighter-grey);
+
+	&::before {
+		content: '';
+		position: absolute;
+		top: 50%;
+		height: 2px;
+		background-color: var(--lighter-grey);
+		animation: strike-through 2s forwards;
+	}
 }
 
 .tasks .taskopts{
