@@ -10,7 +10,7 @@ const pixelify = Pixelify_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "Karo v2 | Todo App",
+  title: "Karo | Todo App",
   description: "A minimalist ToDo manager",
 }
 
