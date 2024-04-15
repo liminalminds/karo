@@ -233,6 +233,12 @@ main .tasks{
 .tasks .delete{
 	cursor: pointer;
 	font-size: 1.75rem;
+	display: none;
+}
+
+.tasks .task:hover{
+	& .delete{
+	display: initial;
 }
 
 .options {
