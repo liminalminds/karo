@@ -18,7 +18,7 @@ interface RootProps {
 	children: React.ReactNode
 }
 
-const RootLayout = ({children}: RootProps) => {
+export default function RootLayout({children}: RootProps) {
 	return (
 		<html lang="en">
 			<body className={`${pixelify.variable}`}>
@@ -27,5 +27,3 @@ const RootLayout = ({children}: RootProps) => {
 		</html>
 	)
 }
-
-export default RootLayout

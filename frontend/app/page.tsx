@@ -15,6 +15,11 @@ export default function Home() {
 	const [total, setTotal] = useState<number>(0)
 	const [complete, setComplete] = useState<number>(0)
 
+	/* Settings */
+	const [topTask, setTopTask] = useState<boolean>(false);
+	const [completeBottom, setCompleteBottom] = useState<boolean>(false);
+
+
 	const ref = useRef<HTMLInputElement>(null)
 	const draggedItem = useRef<number>(0);
 	const draggedOverItem = useRef<number>(0);
@@ -31,9 +36,21 @@ export default function Home() {
 		}
 	}, [])
 
+	function toggleTopTask() {
+		setTopTask((check) => !check)
+	}
+
+	function toggleCompleteBottom() {
+		setCompleteBottom((check) => !check)
+	}
+
 	function toggleComplete(taskId: number, status: boolean) {
 		tasks[taskId].completed = !status
 		setComplete(complete => status?complete-1:complete+1)
+		if (!status && completeBottom) {
+			const [ completedTask ] = tasks.splice(taskId,1)
+			tasks.push(completedTask)
+		}
 		setTasks(() => [...tasks])
 		localStorage.setItem("karo", JSON.stringify(tasks))
 	}
@@ -49,7 +66,7 @@ export default function Home() {
 	function addTask() {
 		if (!ref.current || ref.current.value == '') return
 		const newTask: Task = {completed: false, text: ref.current.value}
-		tasks.push(newTask);
+		topTask ? tasks.unshift(newTask) : tasks.push(newTask);
 		setTasks(() => [...tasks])
 		setTotal((total) => total+1);
 		ref.current.value = ''
@@ -65,6 +82,12 @@ export default function Home() {
 		tasks.splice(draggedOverItem.current, 0, shift)
 		setTasks(() => [...tasks])
 		localStorage.setItem("karo", JSON.stringify(tasks))
+	}
+
+	function clearCompleted() {
+		const newTasks = tasks.filter(task => !task.completed)
+		setTasks(newTasks)
+		localStorage.setItem("karo", JSON.stringify(newTasks))
 	}
 
 	return (
@@ -98,6 +121,19 @@ export default function Home() {
 						<div className='value'>{complete} of {total}</div>
 					</div>
 				</section>
+				<section className='options'>
+					<div className='option'>
+						<input onChange={toggleTopTask} type='checkbox'/>
+						<div className='text'>Add Tasks on Top</div>
+					</div>
+					<div className='option'>
+						<input onChange={toggleCompleteBottom} type='checkbox'/>
+						<div className='text'>Move Completed Items To The Bottom</div>
+					</div>
+					<div className='option'>
+						<button onClick={clearCompleted}>Clear</button>
+					</div>
+				</section>
 				<section className='tasks'>
 					<ul>
 					{
@@ -122,7 +158,7 @@ export default function Home() {
 										:''
 									}
 									</div>
-									<div className={'text' + (task.completed?' done':'')}>{task.text}</div>
+									<div className={'text' + (task.completed?' done':'incomplete')}>{task.text}</div>
 									<div className='taskopts'>
 										<div
 											onClick={() => deleteTask(key, task.completed)}

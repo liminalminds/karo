@@ -217,6 +217,42 @@ main .tasks{
 	font-size: 1.75rem;
 }
 
+.options {
+	padding: 1rem 0;
+	width: var(--container-width);
+	margin: 0 auto;
+}
+
+.options .option{
+	display: flex;
+	gap: 1rem;
+}
+
+.options input{
+	color: var(--violet);
+	outline: none;
+	background-color:var(--yellow);
+	border: 1px solid var(--yellow);
+}
+
+.options .text{
+	color: #666;
+	font-size: 20px;
+}
+
+.options button{
+	transform: translateY(1rem);
+	padding: 0.5rem;
+	border: 1px solid var(--yellow);
+	border-radius: 0.5rem;
+	outline: none;
+	border: none;
+	font-family: var(--font-pixelify);
+	font-size: 20px;
+	color: var(--white);
+	background-color: var(--violet);
+}
+
 @media (width < 1000px) {
 	main .addbtn .text{
 		display: none;
