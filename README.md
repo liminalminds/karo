@@ -1,11 +1,13 @@
 # Karo
 
-*Just-Do-It: A minimalistic ToDo Manager*
+*A minimalistic ToDo Manager*
+
+**URL**: [karo.vercel.app](karo.vercel.app)
 
 ## Development
 
 ```bash
-git clone https:/github.com/sunnybeta/karo
+git clone https:/github.com/liminalminds/karo
 cd karo
 npm i
 npm run dev
@@ -13,4 +15,3 @@ npm run dev
 
 Visit [localhost:3000](localhost:3000)
 
-:)
