@@ -1,0 +1,36 @@
+.options {
+	padding: 1rem 0;
+	width: var(--container-width);
+	margin: 0 auto;
+}
+
+.options > div{
+	display: flex;
+	gap: 1rem;
+}
+
+.options input{
+	color: var(--violet);
+	outline: none;
+	background-color:var(--yellow);
+	border: 1px solid var(--yellow);
+}
+
+.text{
+	color: #666;
+	font-size: 20px;
+}
+
+.button{
+	background-color: var(--violet);
+	border-radius: 0.5rem;
+	border: 1px solid var(--yellow);
+	border: none;
+	color: var(--white);
+	font-family: var(--font-pixelify);
+	font-size: 20px;
+	outline: none;
+	padding: 0.5rem;
+	transform: translateY(1rem);
+	cursor: pointer;
+}
