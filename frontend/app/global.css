@@ -220,7 +220,8 @@ main .tasks{
 
 .tasks .task:hover{
 	& .delete{
-	display: initial;
+		display: initial;
+	}
 }
 
 @media (width < 1000px) {
