@@ -7,10 +7,16 @@ export interface ITask {
 export interface IQuest {
 	id: string
 	name: string
-	tasks: ITask
+	tasks: Array<ITask>
 }
 
-export interface IMiniReportProps{
-	total: number
-	complete: number
+export interface IOptions {
+	moveCompletedToBottom: boolean
+	addNewOnTop: boolean
+}
+
+export interface IStore {
+	quests: Array<IQuest>
+	selected: string | null
+	options: IOptions
 }

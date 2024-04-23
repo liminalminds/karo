@@ -4,30 +4,28 @@ import { ITask } from "../interface"
 import { LuPlusCircle } from "react-icons/lu"
 import { genId } from "../utils"
 import styles from './InputNew.module.css'
+import { useStore } from "../store"
 
 
 export default function InputNew() {
 
-	// const [topTask, setTopTask] = useState<boolean>(false) // comes from localhost OR API
-	// const [tasks, setTasks] = useState<Array<ITask>>([])
-	// const [total, setTotal] = useState<number>(0)
+	const data = useStore((state) => state.data)
+	const addNewOnoTop = data.options.addNewOnTop
 	// const [filterSearch, setFilterSearch] = useState<boolean>(false)
 
 	const ref = useRef<HTMLInputElement>(null)
 
-	function addTask() {
-	// 	if (!ref.current || ref.current.value == "") return
-	// 	const taskId = genId("task_")
-	// 	const newTask: ITask = {
-	// 		id: taskId,
-	// 		completed: false,
-	// 		text: ref.current.value
-	// 	}
-	// 	topTask ? tasks.unshift(newTask) : tasks.push(newTask)
-	// 	setTasks(() => [...tasks])
-	// 	setTotal(() => tasks.length)
-	// 	ref.current.value = ""
-	// 	localStorage.setItem("karo", JSON.stringify(tasks))
+	function addTask(questId: string) {
+		if (!ref.current || ref.current.value == "") return
+		const taskId = genId("task_")
+		const newTask: ITask = {
+			id: taskId,
+			completed: false,
+			text: ref.current.value
+		}
+		// addNewOnTop ? .tasks.unshift(newTask) : tasks.push(newTask)
+		ref.current.value = ""
+		localStorage.setItem("karo", JSON.stringify(tasks))
 	}
 
 	// function search() {
@@ -36,6 +34,7 @@ export default function InputNew() {
 	// 	const query = ref.current?.value.toLowerCase()
 	// 	setTasks(() => [...tasks.filter(task => task.text.toLowerCase().includes(query))])
 	// }
+
 	function onEnter(e: any) {
 		// e.key === "Enter" ? addTask() : search()
 	}

@@ -3,6 +3,8 @@ import InputNew from './components/InputNew'
 import MiniReport from './components/MiniReport'
 import Quest from './components/Quest'
 import Settings from './components/Settings'
+import Main from './components/Main'
+import { ToastContainer } from './components/Toast'
 
 export default function Home() {
 
@@ -48,13 +50,14 @@ export default function Home() {
 
 	return (
 		<>
+			<ToastContainer />
 			<Header />
-			<main>
+			<Main>
 				<InputNew />
 				<Settings />
-				<MiniReport total={144} complete={67}/>
+				<MiniReport />
 				<Quest />
-			</main>
+			</Main>
 		</>
 	)
 }

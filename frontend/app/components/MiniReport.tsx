@@ -1,7 +1,8 @@
-import { IMiniReportProps } from "../interface"
-import styles from './MiniReport.module.css';
+import styles from './MiniReport.module.css'
 
-export default function MiniReport({total, complete}: IMiniReportProps) {
+export default function MiniReport() {
+	const total = 2
+	const complete = 1
 	return (
 		<section className={styles.section}>
 			<div className={styles.total}>
