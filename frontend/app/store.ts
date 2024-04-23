@@ -3,34 +3,34 @@ import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
 type State = {
-	data: IStore
+	data: IStore | any
 }
 
 type Action = {
-	setData: (data: IStore, overwrite: boolean) => void
+	setData: (data: IStore) => any
 }
 
 export const useStore = create<State & Action>()(
 	persist(
 		(set) => ({
 			data: {
-				quests: [],
-				selected: null,
+				quests: [{id: "0", name: "MISC", tasks: []}],
+				selected: "0",
 				options: {
 					addNewOnTop: false,
 					moveCompletedToBottom: false
 				},
 			},
-			setData: (data: IStore, overwrite: boolean) => {
-				set((state) => (
-					overwrite
-					? {...state, quests: data.quests}
-					: {...state, quests: [...state.data.quests, ...data.quests]}
-				))
-			},
+			setData: (data: IStore) => {
+				set((state) => {
+					console.log(state) // incor
+					console.log(data) // correct
+					return {...state, data: data}}
+				)
+			}
 		}),
 		{
-			name: 'karo2',
+			name: "KARO",
 			skipHydration: true,
 		}
 	)

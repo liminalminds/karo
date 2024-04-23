@@ -1,7 +1,8 @@
 "use client"
 import { useRef } from 'react'
 import Task from "./Task"
-import { ITask } from "../interface"
+import { IStore, ITask } from "../interface"
+import { useStore } from "../store"
 
 export default function Quest() {
 	const tasks: Array<ITask> = []
@@ -14,7 +15,7 @@ export default function Quest() {
 		// const [shift] = tasks.splice(draggedItem.current, 1)
 		// tasks.splice(draggedOverItem.current, 0, shift)
 		// setTasks(() => [...tasks])
-		localStorage.setItem("karo", JSON.stringify(tasks))
+		localStorage.setItem("KARO", JSON.stringify(tasks))
 	}
 
 	return (

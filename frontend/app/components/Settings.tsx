@@ -1,45 +1,50 @@
-import { ITask } from '../interface'
-import styles from './Settings.module.css'
+"use client"
+import { useState } from "react"
+import { IStore, ITask } from "../interface"
+import styles from "./Settings.module.css"
+import { useStore } from "../store"
 
 export default function Settings() {
-	//  const [tasks, setTasks] = useState<Array<ITask>>([])
-	//  const [topTask, setTopTask] = useState<boolean>(false);
-	//  const [completeBottom, setCompleteBottom] = useState<boolean>(false);
+	const [data, setData] = useStore(state => [state.data, state.setData])
+	let questIndex = -1
+	if (data.selected != null) {
+		questIndex = data.quests.findIndex(quest => quest.id === data.selected)
+	}
+	if (questIndex == -1) {
+		const tasks: Array<ITask>  = []
+	}
+	else {
+		data.quests[questIndex].tasks
+	}
+	const [topTask, setTopTask] = useState<boolean>(false)//data.options.addNewOnTop);
+	const [completeBottom, setCompleteBottom] = useState<boolean>(false)//data.options.moveCompletedToBottom);
 
-	function toggleTopTask() {
-	//  	setTopTask((check) => !check)
+	const toggleTopTask = () => {
+		setTopTask((check) => !check)
 	}
 
-	function toggleCompleteBottom() {
-	//  	setCompleteBottom((check) => !check)
+	const toggleCompleteBottom = () => {
+		setCompleteBottom((check) => !check)
 	}
 
 	function clearCompleted() {
-	//  	const newTasks = tasks.filter(task => !task.completed)
-	//  	setTasks(newTasks)
-	//  	localStorage.setItem("karo", JSON.stringify(newTasks))
+		const newTasks = tasks.filter(task => !task.completed)
+		setData(data)
+		localStorage.setItem("KARO", JSON.stringify(newTasks))
 	}
-
-	/* Make a custom checkbox and replace the bwloe input:checkbox */
 
 	return (
 		<section className={styles.options}>
 			<div>
-				<input type='checkbox'/>
+				<input onChange={toggleTopTask} type="checkbox"/>
 				<div className={styles.text}>Add Tasks on Top</div>
 			</div>
 			<div>
-				<input type='checkbox'/>
+				<input onChange={toggleCompleteBottom} type="checkbox"/>
 				<div className={styles.text}>Move Completed Items To The Bottom</div>
 			</div>
-			{/*
 			<div>
-				<input onChange={toggleFilterSearch} type='checkbox'/>
-				<div className='text'>Display Items By Content While Typing</div>
-			</div>
-			*/}
-			<div>
-				<button className={styles.button}>Clear</button>
+				<button onClick={clearCompleted} className={styles.button}>Clear</button>
 			</div>
 		</section>
 	)

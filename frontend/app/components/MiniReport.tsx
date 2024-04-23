@@ -1,8 +1,22 @@
-import styles from './MiniReport.module.css'
+"use client"
+import styles from "./MiniReport.module.css"
+import { useStore } from "../store"
+import { IStore } from "../interface"
 
 export default function MiniReport() {
-	const total = 2
-	const complete = 1
+	const data: IStore = useStore((state) => state.data)
+	let total
+	let complete
+	if (data.selected == null) {
+		total = 0
+		complete = 0
+	}
+	else {
+		const questIndex = data["quests"].findIndex((quest) => quest.id === data.selected)
+		const tasks = data["quests"][questIndex].tasks
+		total = tasks.length
+		complete = tasks.filter(task => task.completed).length
+	}
 	return (
 		<section className={styles.section}>
 			<div className={styles.total}>

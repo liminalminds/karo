@@ -1,42 +1,37 @@
 "use client"
-import { useState, useRef } from "react"
-import { ITask } from "../interface"
-import { LuPlusCircle } from "react-icons/lu"
+import { useRef } from "react"
 import { genId } from "../utils"
-import styles from './InputNew.module.css'
 import { useStore } from "../store"
+import { ITask, IQuest } from "../interface"
+import { LuPlusCircle } from "react-icons/lu"
+import styles from "./InputNew.module.css"
 
 
 export default function InputNew() {
-
-	const data = useStore((state) => state.data)
-	const addNewOnoTop = data.options.addNewOnTop
-	// const [filterSearch, setFilterSearch] = useState<boolean>(false)
-
+	const [data, setData] = useStore((state) => [state.data, state.setData])
+	const addNewOnTop = false // move this inside a new component so that InputNew is a server side component
 	const ref = useRef<HTMLInputElement>(null)
 
-	function addTask(questId: string) {
+	function addTask() {
 		if (!ref.current || ref.current.value == "") return
-		const taskId = genId("task_")
 		const newTask: ITask = {
-			id: taskId,
+			id: genId("task_"),
 			completed: false,
 			text: ref.current.value
 		}
-		// addNewOnTop ? .tasks.unshift(newTask) : tasks.push(newTask)
+		const questIndex = data["quests"].findIndex((quest:IQuest) => quest.id === data.selected)
+		if (addNewOnTop) {
+			data["quests"][questIndex].tasks.unshift(newTask)
+		} else {
+			data["quests"][questIndex].tasks.push(newTask)
+		}
 		ref.current.value = ""
-		localStorage.setItem("karo", JSON.stringify(tasks))
+		setData(data)
 	}
 
-	// function search() {
-	// 	if (!filterSearch) return
-	// 	if (!ref.current || ref.current.value == "") return
-	// 	const query = ref.current?.value.toLowerCase()
-	// 	setTasks(() => [...tasks.filter(task => task.text.toLowerCase().includes(query))])
-	// }
-
 	function onEnter(e: any) {
-		// e.key === "Enter" ? addTask() : search()
+		if (data.selected == null) return
+		if (e.key === "Enter") addTask()
 	}
 
 	return (
