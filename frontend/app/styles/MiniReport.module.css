@@ -1,0 +1,43 @@
+.section{
+	display: flex;
+	justify-content: space-between;
+	width: var(--container-width);
+	margin: 0 auto;
+}
+
+.section > div{
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+.total{
+	color: var(--yellow);
+}
+
+.complete{
+	color: var(--violet);
+}
+
+.value{
+	border-radius: 30px;
+	padding: 0.5rem 0.75rem;
+	color: var(--white);
+	background-color: var(--light-grey);
+}
+
+@media (width < 655px) {
+	.section{
+		display: block;
+	}
+	.section > div{
+		justify-content: space-between;
+	}
+}
+
+
+@media (width < 450px) {
+	.section{
+		width: var(--container-width-ss);
+	}
+}

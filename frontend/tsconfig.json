@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "allowJs": false,
     "baseUrl": ".",
+    "allowJs": false,
     "esModuleInterop": true,
     "incremental": true,
     "isolatedModules": true,
@@ -12,10 +12,11 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./*"],
-      "@components/*": ["app/_components/*"],
-      "@store": ["app/_store.ts"],
-      "@types": ["app/_types.tsx"],
-      "@utils": ["app/_utils.tsx"],
+      "@store/*": ["./app/store/*"],
+      "@components/*": ["./app/components/*"],
+      "@interfaces/*": ["./app/interfaces/*"],
+      "@styles/*": ["./app/styles/*"],
+      "@utils/*": ["./app/utils/*"]
     },
     "plugins": [
       {

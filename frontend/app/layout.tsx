@@ -1,6 +1,7 @@
 import { Pixelify_Sans } from "next/font/google";
 import type { Metadata } from "next"
-import "./global.css"
+import RootProps from "@interfaces/props"
+import "@styles/global.css"
 
 const pixelify = Pixelify_Sans({
 	weight:["400","700"],
@@ -12,10 +13,6 @@ const pixelify = Pixelify_Sans({
 export const metadata: Metadata = {
   title: "Karo | Todo App",
   description: "A minimalist ToDo manager",
-}
-
-interface RootProps {
-	children: React.ReactNode
 }
 
 export default function RootLayout({children}: RootProps) {

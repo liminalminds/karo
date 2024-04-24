@@ -1,0 +1,21 @@
+.main{
+	position: relative;
+	top: 300px;
+	color: var(--white);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 64px;
+}
+
+.first{
+	color: var(--yellow);
+}
+
+.second{
+	color: var(--white);
+}
+
+.third{
+	color: var(--violet);
+}
