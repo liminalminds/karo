@@ -1,7 +1,7 @@
 "use client"
-import styles from "./MiniReport.module.css"
-import { useStore } from "../store"
-import { IStore } from "../interface"
+import  { useStore } from "@store/store"
+import IStore from "@interfaces/store"
+import styles from "@styles/MiniReport.module.css"
 
 export default function MiniReport() {
 	const data: IStore = useStore((state) => state.data)
@@ -12,8 +12,8 @@ export default function MiniReport() {
 		complete = 0
 	}
 	else {
-		const questIndex = data["quests"].findIndex((quest) => quest.id === data.selected)
-		const tasks = data["quests"][questIndex].tasks
+		const questIndex = data.quests.findIndex((quest) => quest.id === data.selected)
+		const tasks = data.quests[questIndex].tasks
 		total = tasks.length
 		complete = tasks.filter(task => task.completed).length
 	}

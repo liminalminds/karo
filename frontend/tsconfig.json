@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "allowJs": false,
     "esModuleInterop": true,
     "incremental": true,
@@ -11,6 +12,11 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./*"],
+      "@store/*": ["./app/store/*"],
+      "@components/*": ["./app/components/*"],
+      "@interfaces/*": ["./app/interfaces/*"],
+      "@styles/*": ["./app/styles/*"],
+      "@utils/*": ["./app/utils/*"]
     },
     "plugins": [
       {

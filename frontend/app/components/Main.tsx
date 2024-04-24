@@ -1,6 +1,7 @@
-"use client"
+'use client'
 import { useEffect } from "react"
-import { useStore } from "../store"
+import { useStore } from "@store/store"
+import { LOCALKEY } from "@utils/constants"
 
 interface MainProps {
 	children: React.ReactNode
@@ -11,14 +12,13 @@ export default function Main({children}: MainProps) {
 
 	useEffect(() => {
 		if (localStorage != undefined) {
-			let store = localStorage.getItem("KARO")
+			let store = localStorage.getItem(LOCALKEY)
 			if (store != null) {
-				console.log("FOUND")
 				const localData = JSON.parse(store)
 				setData(localData.state.data)
 			}
 		}
-	}, [])
+	})
 
 	return (
 		<main>

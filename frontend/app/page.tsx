@@ -1,10 +1,10 @@
-import Header from './components/Header'
-import InputNew from './components/InputNew'
-import MiniReport from './components/MiniReport'
-import Quest from './components/Quest'
-import Settings from './components/Settings'
-import Main from './components/Main'
-import { ToastContainer } from './components/Toast'
+import Header from "@components/Header"
+import InputNew from "@components/InputNew"
+import MiniReport from "@components/MiniReport"
+import TaskList from "@components/TaskList"
+import Settings from "@components/Settings"
+import Main from "@components/Main"
+import { ToastContainer } from "@components/Toast"
 
 export default function Home() {
 	return (
@@ -15,7 +15,7 @@ export default function Home() {
 				<InputNew />
 				<Settings />
 				<MiniReport />
-				<Quest />
+				<TaskList />
 			</Main>
 		</>
 	)

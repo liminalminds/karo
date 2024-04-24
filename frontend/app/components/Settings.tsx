@@ -1,46 +1,36 @@
 "use client"
-import { useState } from "react"
-import { IStore, ITask } from "../interface"
-import styles from "./Settings.module.css"
-import { useStore } from "../store"
+import { useStore } from "@store/store"
+import IStore from "@interfaces/store"
+import styles from "@styles/Settings.module.css"
 
 export default function Settings() {
-	const [data, setData] = useStore(state => [state.data, state.setData])
-	let questIndex = -1
-	if (data.selected != null) {
-		questIndex = data.quests.findIndex(quest => quest.id === data.selected)
-	}
-	if (questIndex == -1) {
-		const tasks: Array<ITask>  = []
-	}
-	else {
-		data.quests[questIndex].tasks
-	}
-	const [topTask, setTopTask] = useState<boolean>(false)//data.options.addNewOnTop);
-	const [completeBottom, setCompleteBottom] = useState<boolean>(false)//data.options.moveCompletedToBottom);
+	const [data, setData]:[IStore, (data:IStore) => void] = useStore(state => [state.data, state.setData])
+	const questIndex = data.quests.findIndex(quest => quest.id === data.selected)
+	const tasks = data.quests[questIndex].tasks
 
-	const toggleTopTask = () => {
-		setTopTask((check) => !check)
+	async function toggleTopTask() {
+		data.options.addNewOnTop = !data.options.addNewOnTop
+		setData({...data})
 	}
 
-	const toggleCompleteBottom = () => {
-		setCompleteBottom((check) => !check)
+	async function toggleCompleteBottom() {
+		data.options.moveCompletedToBottom = !data.options.moveCompletedToBottom
+		setData({...data})
 	}
 
-	function clearCompleted() {
-		const newTasks = tasks.filter(task => !task.completed)
-		setData(data)
-		localStorage.setItem("KARO", JSON.stringify(newTasks))
+	async function clearCompleted() {
+		data.quests[questIndex].tasks = tasks.filter(task => !task.completed)
+		setData({...data})
 	}
 
 	return (
 		<section className={styles.options}>
 			<div>
-				<input onChange={toggleTopTask} type="checkbox"/>
+				<input onChange={toggleTopTask} type="checkbox" checked={data.options.addNewOnTop}/>
 				<div className={styles.text}>Add Tasks on Top</div>
 			</div>
 			<div>
-				<input onChange={toggleCompleteBottom} type="checkbox"/>
+				<input onChange={toggleCompleteBottom} type="checkbox" checked={data.options.moveCompletedToBottom}/>
 				<div className={styles.text}>Move Completed Items To The Bottom</div>
 			</div>
 			<div>

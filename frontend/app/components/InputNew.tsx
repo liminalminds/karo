@@ -1,35 +1,35 @@
 "use client"
 import { useRef } from "react"
-import { genId } from "../utils"
-import { useStore } from "../store"
-import { ITask, IQuest } from "../interface"
 import { LuPlusCircle } from "react-icons/lu"
-import styles from "./InputNew.module.css"
-
+import { KeyboardEvent } from 'react'
+import idgen from "@utils/idgen"
+import { useStore } from "@store/store"
+import ITask from "@interfaces/task"
+import IQuest from "@interfaces/quest"
+import styles from "@styles/InputNew.module.css"
 
 export default function InputNew() {
 	const [data, setData] = useStore((state) => [state.data, state.setData])
-	const addNewOnTop = false // move this inside a new component so that InputNew is a server side component
 	const ref = useRef<HTMLInputElement>(null)
 
 	function addTask() {
 		if (!ref.current || ref.current.value == "") return
 		const newTask: ITask = {
-			id: genId("task_"),
+			id: idgen("task_"),
 			completed: false,
 			text: ref.current.value
 		}
-		const questIndex = data["quests"].findIndex((quest:IQuest) => quest.id === data.selected)
-		if (addNewOnTop) {
-			data["quests"][questIndex].tasks.unshift(newTask)
+		const questIndex = data.quests.findIndex((quest:IQuest) => quest.id === data.selected)
+		if (data.options.addNewOnTop) {
+			data.quests[questIndex].tasks.unshift(newTask)
 		} else {
-			data["quests"][questIndex].tasks.push(newTask)
+			data.quests[questIndex].tasks.push(newTask)
 		}
 		ref.current.value = ""
-		setData(data)
+		setData({...data})
 	}
 
-	function onEnter(e: any) {
+	function onEnter(e: KeyboardEvent) {
 		if (data.selected == null) return
 		if (e.key === "Enter") addTask()
 	}

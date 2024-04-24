@@ -1,67 +1,51 @@
-"use client"
-import {useState} from "react"
 import { RiDeleteBinLine } from "react-icons/ri";
 import { RiPencilFill } from "react-icons/ri";
-import { IStore, ITask } from "../interface"
+import IQuest from "@interfaces/quest"
+import ITask from "@interfaces/task"
 import { FaCheck } from "react-icons/fa";
-import styles from "./Task.module.css"
-import { useStore } from "../store"
+import { useStore } from "@store/store"
+import styles from "@styles/Task.module.css"
 
+export default function Task({completed, id, text}: ITask) {
+	const [data, setData] = useStore((state) => [state.data, state.setData])
+	const questIndex = data.quests.findIndex((quest:IQuest) => quest.id === data.selected)
+	const tasks: Array<ITask> = data.quests[questIndex].tasks
 
-
-export default function Task(task: ITask) {
-
-	const [tasks, setTasks] = useState<Array<ITask>>([])
-	const [complete, setComplete] = useState<number>(0)
-	const [completeBottom, setCompleteBottom] = useState<boolean>(false);
-	const [modal, setModel] = useState<boolean>(false) // edit
+	function deleteTask(taskId: string) {
+		data.quests[questIndex].tasks = tasks.filter(task => task.id != taskId)
+		setData({...data})
+	}
 
 	function toggleComplete(taskId: string, status: boolean) {
-		// tasks[taskId].completed = !status
-		// setComplete(complete => status?complete-1:complete+1)
-		// if (!status && completeBottom) {
-		// 	const [ completedTask ] = tasks.splice(taskId,1)
-		// 	tasks.push(completedTask)
-		// }
-		// setTasks(() => [...tasks])
-		// localStorage.setItem("KARO", JSON.stringify(tasks))
-	}
-
-	function editTask(taskId: string) {
-		// setEditModal(visible => !visible)
-		// const newTasks = tasks.filter((_,index) => taskId != index)
-		// setTasks(() => newTasks)
-		// localStorage.setItem("KARO", JSON.stringify(newTasks))
-	}
-
-	function deleteTask(taskId: string, status: boolean) {
-		// const newTasks = tasks.filter((_,index) => taskId != index)
-		// setTasks(() => newTasks)
-		// setComplete((complete) => status?complete-1:complete)
-		// setTotal((total) => total-1);
-		// localStorage.setItem("KARO", JSON.stringify(newTasks))
+		const taskIndex = tasks.findIndex(task => task.id === taskId)
+		tasks[taskIndex].completed = !status
+		if (!status && data.options.moveCompletedToBottom) {
+			const [ completedTask ] = tasks.splice(taskIndex,1)
+			tasks.push(completedTask)
+		}
+		data.quests[questIndex].tasks = tasks
+		setData({...data})
 	}
 
 	return (
 		<div className={styles.task}>
 			<div
-				onClick={() => toggleComplete(task.id, task.completed)}
-				className={`${styles.status}`+`${task.completed?styles.complete:""}`}
+				onClick={() => toggleComplete(id, completed)}
+				className={`${styles.status} `+`${completed?styles.completed:""}`}
 			>
 			{
-				task.completed ? <FaCheck /> : ""
+				completed ? <FaCheck /> : ""
 			}
 			</div>
-			<div className={`${styles.text}`+`${task.completed?styles.done:""}`}>{task.text}</div>
-			<div className={styles.taskpts}>
+			<div className={`${styles.text} `+`${completed?styles.done:""}`}>{text}</div>
+			<div className={styles.taskopts}>
 				<div
-					onClick={() => editTask(task.id)}
 					className={styles.edit}
 				>
 					<RiPencilFill />
 				</div>
 				<div
-					onClick={() => deleteTask(task.id, task.completed)}
+					onClick={() => deleteTask(id)}
 					className={styles.delete}
 				>
 					<RiDeleteBinLine />

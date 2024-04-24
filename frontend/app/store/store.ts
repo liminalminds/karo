@@ -1,13 +1,13 @@
-import { IStore } from "./interface"
+import IStore from "@interfaces/store"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
 type State = {
-	data: IStore | any
+	data: IStore
 }
 
 type Action = {
-	setData: (data: IStore) => any
+	setData: (data: IStore) => void
 }
 
 export const useStore = create<State & Action>()(
@@ -23,8 +23,6 @@ export const useStore = create<State & Action>()(
 			},
 			setData: (data: IStore) => {
 				set((state) => {
-					console.log(state) // incor
-					console.log(data) // correct
 					return {...state, data: data}}
 				)
 			}

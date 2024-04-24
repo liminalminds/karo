@@ -55,6 +55,10 @@ main{
 	font-size: 1.5rem;
 }
 
+ul{
+	list-style-type: none
+}
+
 @media (width < 450px) {
 	main .tasks{
 		width: var(--container-width-ss);
