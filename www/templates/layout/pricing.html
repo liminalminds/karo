@@ -1,0 +1,77 @@
+{{- define "pricing" -}}
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<title>Pricing | Karo</title>
+	<meta name="description"
+		content="Karo pricing: a free basic tier that runs entirely on device, and Pro at $4.99/month for rant parsing and cloud backup.">
+	<link rel="icon" href="/static/img/logo.png">
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+	<a class="skip" href="#main">Skip to content</a>
+
+	<header class="nav">
+		<a class="nav__brand" href="/">
+			<img class="nav__img" src="/static/img/logo.png" alt="Karo Logo">
+			<span>Karo</span>
+		</a>
+		<nav class="nav__links">
+			<a href="/about">About</a>
+			<a href="/#features">Features</a>
+			<a href="/#how">How it works</a>
+		</nav>
+		<a class="btn btn--primary btn--sm" href="/#get">Get the app</a>
+	</header>
+
+	<main id="main">
+		<section class="section">
+			<header class="section__head">
+				<span class="chip chip--yellow">Pricing</span>
+				<h2>Free to keep lists. Paid to be understood.</h2>
+				<p>
+					The basics cost nothing because they run on your device. The only thing that
+					costs Karo anything to serve is the analysis step, and that is what Pro pays for.
+				</p>
+			</header>
+
+			<div class="card-grid card-grid--3">
+				<article class="card">
+					<span class="chip chip--violet tag--sm">Basic</span>
+					<h3>Free</h3>
+					<p>
+						A simple task manager that runs entirely on your device.
+					</p>
+					<ul class="tier__list">
+						<li>Simple task manager</li>
+						<li>Voice notes stay local</li>
+						<li>No cloud support</li>
+					</ul>
+					<a class="btn btn--ghost" href="/#get">Download Karo</a>
+				</article>
+
+				<article class="card">
+					<span class="chip chip--pink tag--sm">Pro</span>
+					<h3>$4.99 / month</h3>
+					<p>
+						For people whose rants are real work.
+					</p>
+					<ul class="tier__list">
+						<li>Rants become actionable tasks</li>
+						<li>Cloud support for saving rants</li>
+					</ul>
+					<a class="btn btn--primary" href="/#get">Get Pro</a>
+				</article>
+			</div>
+		</section>
+	</main>
+
+	{{ template "footer" . }}
+</body>
+
+</html>
+{{- end -}}

@@ -2,17 +2,18 @@ import { useState } from "react";
 import { Modal, Pressable, TextInput, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { UIText } from "@/components/ui-text";
-import { tagColor } from "@/lib/tags";
+import { cycleTagColor, tagColor } from "@/lib/tags";
 
 type Props = {
   visible: boolean;
   tags: string[];
+  tagColors?: Record<string, string>;
   onClose: () => void;
   onRename: (oldTag: string, newTag: string) => void;
   onDelete: (tag: string) => void;
 };
 
-export function TagManager({ visible, tags, onClose, onRename, onDelete }: Props) {
+export function TagManager({ visible, tags, tagColors = {}, onClose, onRename, onDelete }: Props) {
   const [newTag, setNewTag] = useState("");
   const [renaming, setRenaming] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState("");
@@ -25,6 +26,9 @@ export function TagManager({ visible, tags, onClose, onRename, onDelete }: Props
           onPress={() => {}}
         >
           <UIText className="text-lg font-semibold">Tags</UIText>
+          <UIText muted className="-mt-2 text-[11px]">
+            Tap a colour circle to cycle it.
+          </UIText>
 
           {tags.length === 0 && (
             <UIText muted className="text-sm">
@@ -57,11 +61,20 @@ export function TagManager({ visible, tags, onClose, onRename, onDelete }: Props
                   </Pressable>
                 </View>
               ) : (
-                <View key={tag} className="flex-row items-center gap-2">
-                  <View
-                    className="h-2.5 w-2.5 rounded-full"
-                    style={{ backgroundColor: tagColor(tag) }}
-                  />
+                <View key={tag} className="flex-row items-center gap-3">
+                  {/* The circle is the colour editor: each tap steps the hue. */}
+                  <Pressable
+                    onPress={() => cycleTagColor(tag)}
+                    hitSlop={8}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Change colour of ${tag}`}
+                    className="h-8 w-8 items-center justify-center rounded-full active:opacity-60"
+                  >
+                    <View
+                      className="h-6 w-6 rounded-full"
+                      style={{ backgroundColor: tagColor(tag, tagColors) }}
+                    />
+                  </Pressable>
                   <UIText className="flex-1 text-sm">{tag}</UIText>
                   <Pressable
                     onPress={() => {

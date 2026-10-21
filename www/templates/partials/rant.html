@@ -1,0 +1,38 @@
+{{- define "rant-error" -}}
+<div class="demo__out demo__out--error">
+	<p class="demo__error">{{ . }}</p>
+</div>
+{{- end -}}
+
+{{- define "rant-result" -}}
+<div class="demo__out">
+	<div class="transcript">
+		<div class="transcript__head">
+			<span class="dot"></span>
+			<span>Transcribed on device</span>
+		</div>
+		<p>{{ .Rant }}</p>
+	</div>
+
+	<div class="demo__stats">
+		<span class="pill pill--pink">{{ .Tasks }} {{ if eq .Tasks 1 }}task{{ else }}tasks{{ end }}</span>
+		<span class="pill pill--yellow">{{ .Habits }} {{ if eq .Habits 1 }}habit{{ else }}habits{{ end }}</span>
+		<span class="pill pill--violet">draft, nothing saved yet</span>
+	</div>
+
+	<ul class="parsed">
+		{{- range .Items }}
+		<li class="parsed__row">
+			<span class="parsed__kind parsed__kind--{{ if eq .Kind "Habit" }}habit{{ else }}task{{ end }}">{{ .Kind }}</span>
+			<span class="parsed__text">{{ .Text }}</span>
+			{{- if .When }}<span class="parsed__meta">due {{ .When }}</span>{{ end -}}
+			{{- if .Tag }}<span class="tag">#{{ .Tag }}</span>{{ end -}}
+		</li>
+		{{- end }}
+	</ul>
+
+	{{- if not .Items }}
+	<p class="demo__error">Nothing in there looked like something to do. Try naming an action or a time.</p>
+	{{- end }}
+</div>
+{{- end -}}

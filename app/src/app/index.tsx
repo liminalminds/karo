@@ -1,70 +1,195 @@
-import { useMemo, useRef, useState } from "react";
-import { Alert, FlatList, Pressable, View } from "react-native";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AppState, FlatList, Pressable, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Swipeable } from "react-native-gesture-handler";
 import type { SwipeableMethods } from "react-native-gesture-handler/lib/typescript/components/ReanimatedSwipeable/ReanimatedSwipeableProps";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { TaskModal } from "@/components/task-modal";
+import { CheckRow, SectionLabel } from "@/components/check-row";
+import { Celebration } from "@/components/celebrate";
+import { ConfirmModal } from "@/components/confirm-modal";
 import { TagManager } from "@/components/tag-manager";
 import { TabBar } from "@/components/tab-bar";
+import { TagFilterModal } from "@/components/tag-filter-modal";
+import { TaskModal } from "@/components/task-modal";
 import { UIText } from "@/components/ui-text";
-import { cn } from "@/lib/cn";
-import { tagColor } from "@/lib/tags";
-import { Frequency, Task } from "@/lib/types";
+import { useCompletions } from "@/lib/completions-store";
+import { progressMap } from "@/lib/day";
+import { refreshFinishedDays } from "@/lib/day-store";
+import {
+  bumpHabit,
+  deleteHabit,
+  removeTagFromHabits,
+  retagHabits,
+  useHabits,
+} from "@/lib/habits-store";
+import { progressOn, startOfDay, startOfToday } from "@/lib/progress";
+import { deleteTagColor, ensureTag, renameTagColor, useTagColors } from "@/lib/tags";
+import {
+  addTask,
+  bumpTask,
+  deleteTask,
+  purgeCheckedOnceTasks,
+  removeTagFromTasks,
+  retagTasks,
+  updateTask,
+  useTasks,
+  useTasksReady,
+} from "@/lib/tasks-store";
+import type { Frequency, HabitView, Task, TaskView } from "@/lib/types";
 
 const PRIMARY = "#f00359";
 
-const today = () => new Date().toDateString();
-const yesterday = () => new Date(Date.now() - 86400000).toDateString();
-
-function nextStreak(lastActiveDay: string | null, current: number) {
-  if (lastActiveDay === today()) return null;
-  return lastActiveDay === yesterday() ? current + 1 : 1;
-}
+type Row =
+  | { key: string; type: "label"; title: string; hint?: string }
+  | { key: string; type: "habit"; habit: HabitView }
+  | { key: string; type: "task"; task: TaskView };
 
 function deadlineText(deadline: number) {
-  const overdue = deadline < Date.now();
-  return {
-    text: new Date(deadline).toLocaleString([], {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }),
-    color: overdue ? "#f87171" : "#a1a1aa",
-  };
+  return new Date(deadline).toLocaleString([], {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
 }
 
 export default function Index() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [extraTags, setExtraTags] = useState<string[]>([]);
+  const tasks = useTasks();
+  const habits = useHabits();
+  const completions = useCompletions();
+  const tagColors = useTagColors();
+  const ready = useTasksReady();
   const [modalVisible, setModalVisible] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [tagsOpen, setTagsOpen] = useState(false);
-  const [streak, setStreak] = useState(0);
-  const [lastActiveDay, setLastActiveDay] = useState<string | null>(null);
+  const [filterOpen, setFilterOpen] = useState(false);
+  // Tags picked in the filter; empty means every item is shown.
+  const [filterTags, setFilterTags] = useState<string[]>([]);
+  const [pendingDelete, setPendingDelete] = useState<Task | null>(null);
+  // Bumped once per full-day completion, so the celebration replays fresh.
+  const [celebrateRun, setCelebrateRun] = useState(0);
   const swipeRefs = useRef<Record<string, SwipeableMethods | null>>({});
 
+  const today = startOfToday();
+
   const allTags = useMemo(
-    () => [...new Set([...tasks.flatMap((t) => t.tags), ...extraTags])].sort(),
-    [tasks, extraTags]
+    () =>
+      [
+        // Tags can stand alone in the tags store, so its rows are a source too.
+        ...new Set([
+          ...tasks.flatMap((t) => t.tags),
+          ...habits.flatMap((h) => h.tags),
+          ...Object.keys(tagColors),
+        ]),
+      ].sort(),
+    [tasks, habits, tagColors]
   );
 
-  const sortedTasks = useMemo(() => {
-    return [...tasks].sort((a, b) => {
-      if (a.completed !== b.completed) return a.completed ? 1 : -1;
+  const todayProgress = useMemo(
+    () => progressMap(tasks, habits, completions, today),
+    [tasks, habits, completions, today]
+  );
+
+  const { rows, hasContent, todayDone, todayTotal } = useMemo(() => {
+    const byProgress = <T extends { done: boolean; createdAt: number }>(
+      a: T,
+      b: T
+    ) => {
+      if (a.done !== b.done) return a.done ? 1 : -1;
       return b.createdAt - a.createdAt;
+    };
+
+    // An active tag filter keeps only items carrying at least one picked tag;
+    // an empty selection means no filter is applied.
+    const matchesFilter = (itemTags: string[]) =>
+      filterTags.length === 0 || itemTags.some((t) => filterTags.includes(t));
+
+    const habitViews: HabitView[] = habits
+      .filter((habit) => matchesFilter(habit.tags))
+      .map((habit) => {
+        const progress = todayProgress[habit.id] ?? 0;
+        return { ...habit, progress, done: progress >= (habit.count ?? 1) };
+      })
+      .sort(byProgress);
+
+    const view = (task: Task): TaskView => {
+      // progressMap only covers items a day "expects": deadline-day tasks and
+      // habits. Undated tasks belong to no day, so their per-day progress is
+      // read straight from the log here; otherwise the row would never show
+      // done no matter how many times it was tapped.
+      const progress =
+        task.deadline == null
+          ? progressOn(completions, task.id, today)
+          : (todayProgress[task.id] ?? 0);
+      return { ...task, progress, done: progress >= (task.count ?? 1) };
+    };
+
+    // A task belongs to its deadline day and nowhere else, so once that day
+    // has passed an unfinished one leaves this list and stays in History.
+    const todaysTasks = tasks
+      .filter((task) => task.deadline != null && startOfDay(task.deadline) === today)
+      .filter((task) => matchesFilter(task.tags))
+      .map(view)
+      .sort(byProgress);
+
+    // Undated tasks never break a day, so they stay reachable but set apart.
+    const undatedTasks = tasks
+      .filter((task) => task.deadline == null)
+      .filter((task) => matchesFilter(task.tags))
+      .map(view)
+      .sort(byProgress);
+
+    const out: Row[] = [];
+    // Tasks carry no day labels: dated and undated flow as one list, grouped
+    // only by the habit section that follows.
+    for (const task of todaysTasks) {
+      out.push({ key: `t-${task.id}`, type: "task", task });
+    }
+
+    if (habitViews.length) {
+      out.push({ key: "label-habits", type: "label", title: "Habits" });
+      for (const habit of habitViews) {
+        out.push({ key: `h-${habit.id}`, type: "habit", habit });
+      }
+    }
+
+    for (const task of undatedTasks) {
+      out.push({ key: `u-${task.id}`, type: "task", task });
+    }
+
+    return {
+      rows: out,
+      hasContent: habitViews.length + todaysTasks.length + undatedTasks.length > 0,
+      todayDone: [...habitViews, ...todaysTasks].filter((i) => i.done).length,
+      todayTotal: habitViews.length + todaysTasks.length,
+    };
+  }, [tasks, habits, todayProgress, today, completions, filterTags]);
+
+  // Day rollover: when midnight passes — visible on screen or not — checked
+  // once-tasks from the finished day are deleted, and the list starts empty.
+  useEffect(() => {
+    purgeCheckedOnceTasks();
+    const lastDay = startOfToday();
+    let day = lastDay;
+    const roll = () => {
+      const now = startOfToday();
+      if (now !== day) {
+        day = now;
+        // The finished day gets its snapshot first — checked once-tasks are
+        // deleted right after, and their trace must survive in the record.
+        refreshFinishedDays();
+        purgeCheckedOnceTasks();
+      }
+    };
+    // 30s granularity closes the midnight gap to at most half a minute.
+    const interval = setInterval(roll, 30_000);
+    const sub = AppState.addEventListener("change", (state) => {
+      if (state === "active") roll();
     });
-  }, [tasks]);
-
-  const openNewTask = () => {
-    setEditingTask(null);
-    setModalVisible(true);
-  };
-
-  const openEditTask = (task: Task) => {
-    setEditingTask(task);
-    setModalVisible(true);
-  };
+    return () => {
+      clearInterval(interval);
+      sub.remove();
+    };
+  }, []);
 
   const submitTask = (
     title: string,
@@ -74,246 +199,201 @@ export default function Index() {
     count: number
   ) => {
     if (editingTask) {
-      setTasks((prev) =>
-        prev.map((t) =>
-          t.id === editingTask.id
-            ? { ...t, title, tags, frequency, deadline, count }
-            : t
-        )
-      );
+      updateTask(editingTask.id, title, tags, frequency, deadline, count);
     } else {
-      setTasks((prev) => [
-        ...prev,
-        {
-          id: Math.random().toString(36).slice(2),
-          title,
-          tags,
-          frequency,
-          completed: false,
-          createdAt: Date.now(),
-          deadline,
-          count,
-          progress: 0,
-        },
-      ]);
+      addTask(title, tags, frequency, deadline, count);
     }
   };
 
-  const deleteTask = (id: string) => {
-    const task = tasks.find((t) => t.id === id);
-    if (!task || task.frequency === "daily") return;
-    swipeRefs.current[id]?.close();
-    setTasks((prev) => prev.filter((t) => t.id !== id));
-  };
+  // Everything expected of today done is worth a beat. The boundary ref keeps
+  // re-completing (and momentarily-dropped items) from re-firing the burst.
+  const celebratedRef = useRef(false);
+  useEffect(() => {
+    if (todayTotal > 0 && todayDone === todayTotal && !celebratedRef.current) {
+      celebratedRef.current = true;
+      const id = requestAnimationFrame(() => setCelebrateRun((r) => r + 1));
+      return () => cancelAnimationFrame(id);
+    }
+    if (todayDone !== todayTotal) celebratedRef.current = false;
+  }, [todayDone, todayTotal]);
 
-  const bumpProgress = (id: string) => {
-    const task = tasks.find((t) => t.id === id);
-    if (!task) return;
-
-    const count = Math.max(1, task.count ?? 1);
-    const progress = task.progress ?? 0;
-
-    let nextProgress: number;
-    let completed: boolean;
-
-    if (task.completed) {
-      // toggle back to incomplete; reset counter if it was fully completed
-      nextProgress = progress >= count ? 0 : progress;
-      completed = false;
-    } else if (progress + 1 >= count) {
-      nextProgress = count;
-      completed = true;
-    } else {
-      nextProgress = progress + 1;
-      completed = false;
+  const renderRow = (row: Row) => {
+    if (row.type === "label") {
+      return <SectionLabel title={row.title} hint={row.hint} />;
     }
 
-    if (completed && !task.completed) {
-      const updated = nextStreak(lastActiveDay, streak);
-      if (updated !== null) {
-        setStreak(updated);
-        setLastActiveDay(today());
-      }
-    }
-
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === id ? { ...t, progress: nextProgress, completed } : t
-      )
-    );
-  };
-
-  const renameTag = (oldTag: string, newTag: string) => {
-    if (!oldTag) {
-      // add new standalone tag
-      setExtraTags((prev) =>
-        prev.includes(newTag) || allTags.includes(newTag) ? prev : [...prev, newTag]
+    if (row.type === "habit") {
+      const [key] = [`h-${row.habit.id}`]
+      return (
+        <SwipeableRow
+          registerRef={(ref) => (swipeRefs.current[key] = ref)}
+          onDelete={() => {
+            swipeRefs.current[key]?.close();
+            deleteHabit(row.habit.id);
+          }}
+        >
+          <CheckRow
+            title={row.habit.title}
+            tags={row.habit.tags}
+            done={row.habit.done}
+            progress={row.habit.progress}
+            count={row.habit.count}
+            tagColors={tagColors}
+            badge="daily"
+            onToggle={() => bumpHabit(row.habit.id)}
+          />
+        </SwipeableRow >
       );
-      return;
     }
-    if (oldTag === newTag) return;
-    setExtraTags((prev) => prev.map((t) => (t === oldTag ? newTag : t)));
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.tags.includes(oldTag)
-          ? {
-              ...t,
-              tags: [
-                ...new Set(t.tags.map((g) => (g === oldTag ? newTag : g))),
-              ],
-            }
-          : t
-      )
+
+    const task = row.task;
+    return (
+      <SwipeableRow
+        registerRef={(ref) => (swipeRefs.current[task.id] = ref)}
+        onDelete={() => {
+          swipeRefs.current[task.id]?.close();
+          setPendingDelete(task);
+        }}
+        onEdit={() => {
+          swipeRefs.current[task.id]?.close();
+          setEditingTask(task);
+          setModalVisible(true);
+        }}
+      >
+        <CheckRow
+          title={task.title}
+          tags={task.tags}
+          done={task.done}
+          progress={task.progress}
+          count={task.count}
+          tagColors={tagColors}
+          badge={task.frequency !== "once" ? task.frequency : undefined}
+          onToggle={() => bumpTask(task.id)}
+          meta={
+            task.deadline ? (
+              <>
+                <Ionicons name="time-outline" size={12} color="#a1a1aa" />
+                <UIText className="text-2xs text-zinc-400">
+                  {deadlineText(task.deadline)}
+                </UIText>
+              </>
+            ) : undefined
+          }
+        />
+      </SwipeableRow>
     );
   };
-
-  const deleteTag = (tag: string) => {
-    setExtraTags((prev) => prev.filter((t) => t !== tag));
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.tags.includes(tag)
-          ? { ...t, tags: t.tags.filter((g) => g !== tag) }
-          : t
-      )
-    );
-  };
-
-  const micPress = () =>
-    Alert.alert("Voice", "Voice recording coming soon.");
 
   return (
     <SafeAreaView className="flex-1 bg-zinc-950" edges={["top"]}>
       {/* Header */}
       <View className="flex-row items-center justify-between px-5 pt-3 pb-2">
-        <Pressable onPress={() => setTagsOpen(true)} hitSlop={8}>
-          <Ionicons name="pricetags-outline" size={22} color="#a1a1aa" />
+        {/* Filter: narrows the list to items carrying any picked tag. The
+            icon lights up while a filter is active. */}
+        <Pressable
+          onPress={() => setFilterOpen(true)}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="Filter by tag"
+          className="mr-1"
+        >
+          <Ionicons
+            name="filter-outline"
+            size={26}
+            color={filterTags.length > 0 ? PRIMARY : "#a1a1aa"}
+          />
         </Pressable>
-        <View className="flex-row items-center gap-1.5 px-3 py-1.5">
-          <Ionicons name="flame" size={16} color="white" />
-          <UIText className="text-sm font-semibold">{streak}</UIText>
+        <View className="flex-row items-center gap-2">
+          <HeaderPill
+            icon="flower-outline"
+            label=""
+            color="lightgreen"
+            onPress={() => router.push("/habits")}
+          />
+          <HeaderPill
+            icon="checkmark-done-outline"
+            label=""
+            color="lightblue"
+            onPress={() => router.push("/checklists")}
+          />
+          <HeaderPill
+            icon="document-text-outline"
+            label=""
+            color="orange"
+            onPress={() => router.push("/notes")}
+          />
+          <HeaderPill
+            icon="musical-notes"
+            label=""
+            color="magenta"
+            onPress={() => router.push("/recordings")}
+          />
+          <HeaderPill
+            onPress={() => setTagsOpen(true)}
+            label=""
+            color="yellow"
+            icon="pricetags-outline"
+          />
         </View>
       </View>
 
-      {/* Task list */}
+      {/* List */}
       <FlatList
-        data={sortedTasks}
-        keyExtractor={(t) => t.id}
-        contentContainerClassName="px-5 pb-40 gap-2"
+        data={rows}
+        keyExtractor={(row) => row.key}
+        contentContainerClassName="px-5 pb-44 gap-2"
         keyboardShouldPersistTaps="handled"
-        ListEmptyComponent={
-          <UIText muted className="py-12 text-center text-sm">
-            No tasks yet.
-          </UIText>
+        ListFooterComponent={
+          hasContent || !ready ? null : (
+            <UIText muted className="py-12 text-center text-sm">
+              Nothing today. Tap + to add a task.
+            </UIText>
+          )
         }
-        renderItem={({ item }) => (
-          <SwipeableRow
-            task={item}
-            registerRef={(r) => (swipeRefs.current[item.id] = r)}
-            onDelete={() => deleteTask(item.id)}
-          >
-            <Pressable
-              onPress={() => bumpProgress(item.id)}
-              onLongPress={() => openEditTask(item)}
-              className="flex-row items-center gap-3 rounded-xl bg-zinc-900 border border-zinc-800 p-4"
-            >
-              <View
-                className={cn(
-                  "h-5 w-5 items-center justify-center rounded-full border",
-                  item.completed ? "" : "border-zinc-600"
-                )}
-                style={
-                  item.completed
-                    ? { backgroundColor: PRIMARY, borderColor: PRIMARY }
-                    : undefined
-                }
-              >
-                {item.completed && (
-                  <UIText className="text-[10px] text-white">✓</UIText>
-                )}
-              </View>
-
-              <View className="flex-1 gap-1">
-                <View className="flex-row flex-wrap items-baseline gap-x-1.5">
-                  <UIText
-                    className={cn(item.completed && "line-through opacity-40")}
-                  >
-                    {item.title}
-                  </UIText>
-                  {(item.count ?? 1) > 1 && (
-                    <UIText muted className="text-xs font-medium">
-                      ({item.progress ?? 0}/{item.count})
-                    </UIText>
-                  )}
-                </View>
-                {(item.tags.length > 0 || item.frequency !== "once" || item.deadline) && (
-                  <View className="flex-row flex-wrap items-center gap-1.5">
-                    {item.frequency !== "once" && (
-                      <UIText className="text-[10px] text-sky-400 uppercase tracking-wide">
-                        {item.frequency}
-                      </UIText>
-                    )}
-                    {item.tags.map((tag) => (
-                      <View
-                        key={tag}
-                        className="rounded-full px-2 py-0.5"
-                        style={{ backgroundColor: `${tagColor(tag)}26` }}
-                      >
-                        <UIText
-                          className="text-[10px] font-medium"
-                          style={{ color: tagColor(tag) }}
-                        >
-                          {tag}
-                        </UIText>
-                      </View>
-                    ))}
-                    {item.deadline && (
-                      <>
-                        <Ionicons
-                          name="time-outline"
-                          size={11}
-                          color={
-                            item.completed
-                              ? "#a1a1aa"
-                              : deadlineText(item.deadline).color
-                          }
-                        />
-                        <UIText
-                          className="text-[10px]"
-                          style={{
-                            color: deadlineText(item.deadline).color,
-                            ...(item.completed ? { opacity: 0.4 } : {}),
-                          }}
-                        >
-                          {deadlineText(item.deadline).text}
-                        </UIText>
-                      </>
-                    )}
-                  </View>
-                )}
-              </View>
-
-              <Pressable
-                onPress={() => openEditTask(item)}
-                hitSlop={8}
-                className="p-1"
-              >
-                <Ionicons name="pencil" size={16} color="#71717a" />
-              </Pressable>
-            </Pressable>
-          </SwipeableRow>
-        )}
+        renderItem={({ item }) => renderRow(item)}
       />
 
-      {/* FAB */}
-      <Pressable
-        onPress={openNewTask}
-        className="absolute bottom-28 right-6 h-14 w-14 items-center justify-center rounded-2xl active:opacity-80 shadow-lg shadow-black/50"
-        style={{ backgroundColor: PRIMARY }}
-      >
-        <Ionicons name="add" size={30} color="white" />
-      </Pressable>
+      {/* Today's progress, level with the add button */}
+      <View className="absolute bottom-28 left-6 right-6 flex-row items-center justify-between">
+        {todayTotal > 0 && (
+          <View className="flex-row items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900 px-3 py-2">
+            <Ionicons name="checkmark-done" size={14} color="#a1a1aa" />
+            <UIText className="text-2xs font-semibold text-zinc-300">
+              {todayDone}/{todayTotal} done today
+            </UIText>
+          </View>
+        )}
+        <Pressable
+          onPress={() => {
+            setEditingTask(null);
+            setModalVisible(true);
+          }}
+          className="ml-auto h-14 w-14 items-center justify-center rounded-2xl active:opacity-80 shadow-lg shadow-black/50"
+          style={{ backgroundColor: PRIMARY }}
+        >
+          <Ionicons name="add" size={30} color="white" />
+        </Pressable>
+      </View>
 
-      <TabBar onLists={() => router.push("/lists")} onMic={micPress} />
+      <TabBar
+        onLists={() => router.push("/lists")}
+        onHistory={() => router.push("/history")}
+        onSavedRecording={() => router.push("/recordings")}
+        onPomodoro={() => router.push("/pomodoro")}
+      />
+
+      <Celebration run={celebrateRun} />
+
+      <ConfirmModal
+        visible={pendingDelete !== null}
+        title={`Delete "${pendingDelete?.title ?? ""}"?`}
+        body="The task and its completions are removed. This cannot be undone."
+        onConfirm={() => {
+          if (pendingDelete) deleteTask(pendingDelete.id);
+          setPendingDelete(null);
+        }}
+        onCancel={() => setPendingDelete(null)}
+      />
 
       <TaskModal
         visible={modalVisible}
@@ -326,41 +406,101 @@ export default function Index() {
       <TagManager
         visible={tagsOpen}
         tags={allTags}
+        tagColors={tagColors}
         onClose={() => setTagsOpen(false)}
-        onRename={renameTag}
-        onDelete={deleteTag}
+        onRename={(oldTag, newTag) => {
+          // Creating from the menu: the tag stands on its own, with a stable
+          // row and colour, even before any task uses it.
+          if (!oldTag) {
+            ensureTag(newTag);
+            return;
+          }
+          retagTasks(oldTag, newTag);
+          retagHabits(oldTag, newTag);
+          renameTagColor(oldTag, newTag);
+        }}
+        onDelete={(tag) => {
+          removeTagFromTasks(tag);
+          removeTagFromHabits(tag);
+          deleteTagColor(tag);
+        }}
       />
-    </SafeAreaView>
+
+      <TagFilterModal
+        visible={filterOpen}
+        tags={allTags}
+        tagColors={tagColors}
+        selected={filterTags}
+        onToggle={(tag) =>
+          setFilterTags((prev) =>
+            prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+          )
+        }
+        onClear={() => setFilterTags([])}
+        onClose={() => setFilterOpen(false)}
+      />
+    </SafeAreaView >
+  );
+}
+
+function HeaderPill({
+  icon,
+  label,
+  onPress,
+  color = "#a1a1aa",
+}: {
+  icon: React.ComponentProps<typeof Ionicons>["name"];
+  label: string;
+  color: string,
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      hitSlop={8}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      className="px-3"
+    >
+      <Ionicons name={icon} size={28} color={color} />
+      <UIText className="text-2xs font-semibold text-zinc-300">{label}</UIText>
+    </Pressable>
   );
 }
 
 function SwipeableRow({
-  task,
   children,
   registerRef,
   onDelete,
+  onEdit,
 }: {
-  task: Task;
   children: React.ReactNode;
   registerRef: (ref: SwipeableMethods | null) => void;
   onDelete: () => void;
+  onEdit?: () => void;
 }) {
-  const deletable = task.frequency !== "daily" && !task.completed;
-
-  if (!deletable) return <>{children}</>;
-
   return (
     <Swipeable
       ref={registerRef}
       friction={2}
       rightThreshold={40}
       renderRightActions={() => (
-        <Pressable
-          onPress={onDelete}
-          className="ml-2 h-auto w-16 items-center justify-center rounded-xl bg-red-500/90"
-        >
-          <UIText className="font-semibold text-zinc-950">Delete</UIText>
-        </Pressable>
+        <View className="ml-2 h-auto flex-row items-stretch">
+          {onEdit && (
+            <Pressable
+              onPress={onEdit}
+              className="w-16 items-center justify-center rounded-xl bg-sky-500/90 active:opacity-70"
+            >
+              <UIText className="font-semibold text-zinc-950">Edit</UIText>
+            </Pressable>
+          )}
+          <Pressable
+            onPress={onDelete}
+            className={`${onEdit ? "ml-2" : ""} w-16 items-center justify-center rounded-xl bg-red-500/90 active:opacity-70`}
+          >
+            <UIText className="font-semibold text-zinc-950">Delete</UIText>
+          </Pressable>
+        </View>
       )}
     >
       {children}

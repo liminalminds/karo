@@ -1,0 +1,412 @@
+{{- define "index" -}}
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<title>Karo | Your Personal AI Task Manager</title>
+	<meta name="description"
+		content="Karo is an AI-powered task manager: rant at your phone and it writes the tasks, tracks habits, keeps streaks, files tags, groups work and handles reminders and goals.">
+	<meta property="og:title" content="Karo — rant it, Karo plans it">
+	<meta property="og:description"
+		content="An AI-powered task manager that reads rants, automates tasks, tracks habits and streaks, and keeps tags, groups, reminders and goals in one place.">
+	<meta property="og:type" content="website">
+	<link rel="icon" href="/static/img/logo.png">
+	<link rel="stylesheet" href="/static/css/style.css">
+	<script src="/static/js/htmx.min.js" defer></script>
+</head>
+
+<body>
+	<a class="skip" href="#main">Skip to content</a>
+
+	<header class="nav">
+		<a class="nav__brand" href="/">
+			<img class="nav__img" src="/static/img/logo.png" alt="Karo Logo">
+			<span>Karo</span>
+		</a>
+		<nav class="nav__links">
+			<a href="#features">Features</a>
+			<a href="#rant">Try it</a>
+			<a href="#how">How it works</a>
+			<a href="#faq">FAQ</a>
+			<a href="/pricing">Pricing</a>
+		</nav>
+		<a class="btn btn--primary btn--sm" href="#get">Get the app</a>
+	</header>
+
+	<main id="main">
+
+		<section class="hero">
+			<div class="hero__copy">
+				<span class="chip chip--pink">
+					<span class="dot dot--pulse"></span>
+					AI-powered task manager
+				</span>
+				<h1>Rant it.<br>Karo <em>plans</em> it.</h1>
+				<p class="hero__sub">
+					Most task managers ask you to fill in a form while you are busy.
+					Karo listens instead. Rant about everything on your plate, and it writes the
+					tasks, schedules them, tags them, starts the habits and keeps the streak
+					honest.
+				</p>
+				<div class="hero__cta">
+					<a class="btn btn--primary" href="#get">Get Karo</a>
+					<a class="btn btn--ghost" href="#rant">Try the demo</a>
+				</div>
+				<ul class="hero__badges">
+					<li>iOS &amp; Android</li>
+					<li>Transcripts stay on device</li>
+					<li>Works offline</li>
+				</ul>
+			</div>
+
+			<div class="hero__art" aria-hidden="true">
+				<div class="phone">
+					<div class="phone__notch"></div>
+					<div class="phone__screen">
+						<div class="phone__head">
+							<span class="phone__date">Today</span>
+							<span class="phone__streak">
+								<span class="flame">&#128293;</span> 12
+							</span>
+						</div>
+
+						<div class="row row--done">
+							<span class="tick tick--on"></span>
+							<span class="row__title">Morning run</span>
+							<span class="tag tag--sm">health</span>
+						</div>
+						<div class="row row--done">
+							<span class="tick tick--on"></span>
+							<span class="row__title">Read 20 pages</span>
+							<span class="tag tag--sm">evening</span>
+						</div>
+						<div class="row">
+							<span class="tick"></span>
+							<span class="row__title">Draft the quarterly report</span>
+						</div>
+						<div class="row">
+							<span class="tick"></span>
+							<span class="row__title">Water plants</span>
+							<span class="count">2/8</span>
+						</div>
+
+						<div class="bubble">
+							<span class="bubble__label">voice note &rarr; transcript</span>
+							<p>&ldquo;ok so tomorrow I have to call the landlord, email the invoice,
+								and honestly I should drink water like eight times a day&hellip;&rdquo;</p>
+							<div class="bubble__chips">
+								<span class="chip chip--pink">3 tasks</span>
+								<span class="chip chip--yellow">1 habit</span>
+								<span class="chip chip--violet">#work</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="glow"></div>
+			</div>
+		</section>
+
+		<section class="strip">
+			<div class="strip__inner">
+				<span>Reads rants</span><span class="strip__sep">&bull;</span>
+				<span>Automates the busywork</span><span class="strip__sep">&bull;</span>
+				<span>Habit tracking</span><span class="strip__sep">&bull;</span>
+				<span>Streaks &amp; history</span><span class="strip__sep">&bull;</span>
+				<span>Tags</span><span class="strip__sep">&bull;</span>
+				<span>Work groups</span><span class="strip__sep">&bull;</span>
+				<span>Reminders</span><span class="strip__sep">&bull;</span>
+				<span>Goals</span>
+			</div>
+		</section>
+
+		<section class="section" id="features">
+			<header class="section__head">
+				<span class="chip chip--yellow">Everything in one list</span>
+				<h2>A task manager that listens</h2>
+				<p>
+					Tasks are the obvious part. Karo is built around the parts that usually
+					get abandoned a week in: the habits, the streak, the tags and the
+					follow-through.
+				</p>
+			</header>
+
+			<div class="card-grid card-grid--3">
+				<article class="card">
+					<span class="card__icon">&#127908;</span>
+					<h3>Reads your rants</h3>
+					<p>
+						Hold the button and talk. The transcript is written while you speak,
+						and the mess of it is split into real items &mdash; no typing, no
+						forgetting what you meant to add while you were saying it.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#9881;&#65039;</span>
+					<h3>Automates the admin</h3>
+					<p>
+						Date words become deadlines, &ldquo;every day&rdquo; becomes a habit, and
+						tags you mention get filed on the spot. You review the draft instead
+						of building it.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#127919;</span>
+					<h3>Habit tracking</h3>
+					<p>
+						Habits live beside your tasks with their own daily counts. Want water
+						eight times? That is one habit with a target of eight, not eight
+						things to tap.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#128293;</span>
+					<h3>Streaks that mean something</h3>
+					<p>
+						A day only counts when everything expected that day was finished. Add
+						a habit today and yesterday&rsquo;s streak stays exactly where it was.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#128197;</span>
+					<h3>History &amp; reminders</h3>
+					<p>
+						Every day closes into a frozen record of what you said you would do
+						and whether you did. Missed days surface before they quietly vanish.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#127991;&#65039;</span>
+					<h3>Goals without the grind</h3>
+					<p>
+						A goal is just a recurring habit you care about. Progress shows up as
+						counts and streaks instead of a project plan you abandon on day four.
+					</p>
+				</article>
+			</div>
+
+			<div id="features-extra" class="card-grid card-grid--3 card-grid--more" hx-get="/fragments/features"
+				hx-trigger="load" hx-swap="innerHTML">
+			</div>
+
+			<div class="center">
+				<button class="btn btn--ghost" hx-get="/fragments/features" hx-target="#features-extra"
+					hx-swap="innerHTML">
+					Show what else it does
+				</button>
+			</div>
+		</section>
+
+		<section class="section section--split" id="rant">
+			<div class="section__head section__head--left">
+				<span class="chip chip--pink">Try it right here</span>
+				<h2>Say the mess out loud</h2>
+				<p>
+					This demo runs a simplified version of the extraction Karo does on device.
+					Write a rant below, or steal one.
+				</p>
+
+				<div class="samples">
+					<span class="samples__label">Try a sample</span>
+					<div class="samples__row">
+						<button class="btn btn--soft btn--xs" hx-post="/demo/rant"
+							hx-vals='{"rant": "ok tomorrow I have to call the landlord about the lease, email Dana back about the invoice, and buy groceries. also I should drink water like eight times a day and stretch every morning @health"}'
+							hx-target="#demo-out" hx-swap="innerHTML">
+							The classic day
+						</button>
+						<button class="btn btn--soft btn--xs" hx-post="/demo/rant"
+							hx-vals='{"rant": "ship the karo landing page before friday, write the release notes, review the analytics dashboard with Priya @work, and go to the gym every day"}'
+							hx-target="#demo-out" hx-swap="innerHTML">
+							Work crunch
+						</button>
+					</div>
+				</div>
+
+				<form class="demo__form" hx-post="/demo/rant" hx-target="#demo-out" hx-swap="innerHTML">
+					<label class="visually-hidden" for="rant">Your rant</label>
+					<textarea id="rant" name="rant" rows="5"
+						placeholder="today I need to... also every day I should..."></textarea>
+					<button class="btn btn--primary" type="submit">Rant it</button>
+				</form>
+			</div>
+
+			<div id="demo-out" class="demo" aria-live="polite">
+				<div class="demo__placeholder">
+					<p>Your parsed tasks land here.</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="section" id="how">
+			<header class="section__head">
+				<span class="chip chip--violet">How it works</span>
+				<h2>From rant to done</h2>
+			</header>
+
+			<div class="tabs" role="tablist">
+				<button class="tab" role="tab" hx-get="/fragments/how/1" hx-target="#how-panel" hx-swap="innerHTML"
+					hx-indicator="#how-swap">01 Speak</button>
+				<button class="tab" role="tab" hx-get="/fragments/how/2" hx-target="#how-panel" hx-swap="innerHTML"
+					hx-indicator="#how-swap">02 Parse</button>
+				<button class="tab" role="tab" hx-get="/fragments/how/3" hx-target="#how-panel" hx-swap="innerHTML"
+					hx-indicator="#how-swap">03 Confirm</button>
+				<button class="tab" role="tab" hx-get="/fragments/how/4" hx-target="#how-panel" hx-swap="innerHTML"
+					hx-indicator="#how-swap">04 Keep score</button>
+			</div>
+			<span id="how-swap" class="htmx-indicator">loading&hellip;</span>
+			<div class="panel">
+				<div class="step">
+					<span class="step__tag">01</span>
+					<h3>Say it the messy way</h3>
+					<p>
+						Hold the phone, rant for forty seconds, stop caring about grammar.
+						Karo captures the audio and writes the transcript at the same time,
+						so nothing is lost between the thought and the list.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="section" id="groups">
+			<header class="section__head">
+				<span class="chip chip--pink">Work groups &amp; lists</span>
+				<h2>Separate worlds, one app</h2>
+				<p>
+					Work, home, a renovation, the list of films you owe a friend. Each gets its
+					own checklist, and tags cut across all of them so you can still ask
+					&ldquo;what is on my plate today&rdquo; and get one answer.
+				</p>
+			</header>
+
+			<div class="bento">
+				<article class="bento__cell bento__cell--wide">
+					<h3>Tags that colour the whole app</h3>
+					<p>
+						Give a tag a colour once and every task, habit and list item that
+						carries it picks it up. Sorting by tag is a glance, not a query.
+					</p>
+					<div class="bento__tags">
+						<span class="tag">#work</span>
+						<span class="tag">#health</span>
+						<span class="tag">#home</span>
+						<span class="tag">#money</span>
+						<span class="tag">#reading</span>
+					</div>
+				</article>
+
+				<article class="bento__cell">
+					<h3>Deadlines you cannot miss</h3>
+					<p>Anything with a date shows up on its own day, and the day it slips into the past gets called out.
+					</p>
+				</article>
+
+				<article class="bento__cell">
+					<h3>Repeating work</h3>
+					<p>Daily, weekly, monthly or once. Set it once and it keeps coming back.</p>
+				</article>
+
+				<article class="bento__cell bento__cell--wide">
+					<h3>Today is a view, not a list to maintain</h3>
+					<p>
+						Open the app and you see what is due today, what is unfinished, and
+						how far along the day is. Everything else is exactly where you left
+						it &mdash; there is no inbox to empty.
+					</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="section" id="faq">
+			<header class="section__head">
+				<span class="chip chip--yellow">Questions</span>
+				<h2>The fine print, briefly</h2>
+			</header>
+
+			<div class="faq">
+				<details class="faq__item" id="faq-data" hx-get="/fragments/faq/data" hx-target="#faq-data-a"
+					hx-swap="innerHTML" hx-indicator="#faq-load-data">
+					<summary>
+						<span>Where does my data live?</span>
+						<span class="faq__icon">+</span>
+					</summary>
+					<div class="faq__answer-wrap" id="faq-data-a">
+						<span class="htmx-indicator" id="faq-load-data">loading&hellip;</span>
+					</div>
+				</details>
+
+				<details class="faq__item" id="faq-ai" hx-get="/fragments/faq/ai" hx-target="#faq-ai-a"
+					hx-swap="innerHTML" hx-indicator="#faq-load-ai">
+					<summary>
+						<span>So what does the AI actually do?</span>
+						<span class="faq__icon">+</span>
+					</summary>
+					<div class="faq__answer-wrap" id="faq-ai-a">
+						<span class="htmx-indicator" id="faq-load-ai">loading&hellip;</span>
+					</div>
+				</details>
+
+				<details class="faq__item" id="faq-habits" hx-get="/fragments/faq/habits" hx-target="#faq-habits-a"
+					hx-swap="innerHTML" hx-indicator="#faq-load-habits">
+					<summary>
+						<span>How are streaks counted?</span>
+						<span class="faq__icon">+</span>
+					</summary>
+					<div class="faq__answer-wrap" id="faq-habits-a">
+						<span class="htmx-indicator" id="faq-load-habits">loading&hellip;</span>
+					</div>
+				</details>
+
+				<details class="faq__item" id="faq-groups" hx-get="/fragments/faq/groups" hx-target="#faq-groups-a"
+					hx-swap="innerHTML" hx-indicator="#faq-load-groups">
+					<summary>
+						<span>What are groups and lists for?</span>
+						<span class="faq__icon">+</span>
+					</summary>
+					<div class="faq__answer-wrap" id="faq-groups-a">
+						<span class="htmx-indicator" id="faq-load-groups">loading&hellip;</span>
+					</div>
+				</details>
+
+				<details class="faq__item" id="faq-goals" hx-get="/fragments/faq/goals" hx-target="#faq-goals-a"
+					hx-swap="innerHTML" hx-indicator="#faq-load-goals">
+					<summary>
+						<span>How do you track a goal?</span>
+						<span class="faq__icon">+</span>
+					</summary>
+					<div class="faq__answer-wrap" id="faq-goals-a">
+						<span class="htmx-indicator" id="faq-load-goals">loading&hellip;</span>
+					</div>
+				</details>
+
+				<details class="faq__item" id="faq-price" hx-get="/fragments/faq/price" hx-target="#faq-price-a"
+					hx-swap="innerHTML" hx-indicator="#faq-load-price">
+					<summary>
+						<span>Is any of this paid?</span>
+						<span class="faq__icon">+</span>
+					</summary>
+					<div class="faq__answer-wrap" id="faq-price-a">
+						<span class="htmx-indicator" id="faq-load-price">loading&hellip;</span>
+					</div>
+				</details>
+			</div>
+		</section>
+
+		<section class="section cta" id="get">
+			<h2>Say it once. Forget you have to remember it.</h2>
+			<p>Karo is free to install. The only thing that costs anything is asking it to read a recording end to end.
+			</p>
+			<a class="btn btn--primary btn--lg" href="#">Download for iOS and Android</a>
+		</section>
+	</main>
+
+	{{ template "footer" . }}
+</body>
+
+</html>
+{{- end -}}

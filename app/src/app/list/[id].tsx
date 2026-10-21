@@ -8,13 +8,15 @@ import {
   addItem,
   deleteItem,
   getList,
-  useLists,
   toggleItem,
+  useLists,
+  useListsReady,
 } from "@/lib/lists-store";
 
 export default function ListDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const lists = useLists();
+  const ready = useListsReady();
   const list = getList(id as string) ?? lists.find((l) => l.id === id);
   const [text, setText] = useState("");
   const ref = useRef<TextInput>(null);
@@ -24,10 +26,11 @@ export default function ListDetail() {
     return () => clearTimeout(t);
   }, []);
 
+  // A missing list before hydration finishes is a loading state, not a 404.
   if (!list) {
     return (
       <SafeAreaView className="flex-1 bg-zinc-950 items-center justify-center">
-        <UIText muted>List not found.</UIText>
+        <UIText muted>{ready ? "List not found." : ""}</UIText>
       </SafeAreaView>
     );
   }

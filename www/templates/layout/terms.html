@@ -1,0 +1,117 @@
+{{- define "terms" -}}
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<title>Terms of use | Karo</title>
+	<meta name="description" content="The terms for using Karo: what the app is, what Pro covers, your responsibilities and what we expect from the content you speak into it.">
+	<link rel="icon" href="/static/img/logo.png">
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+	<a class="skip" href="#main">Skip to content</a>
+
+	<header class="nav">
+		<a class="nav__brand" href="/">
+			<img class="nav__img" src="/static/img/logo.png" alt="Karo Logo">
+			<span>Karo</span>
+		</a>
+		<nav class="nav__links">
+			<a href="/about">About</a>
+			<a href="/pricing">Pricing</a>
+			<a href="/#faq">FAQ</a>
+		</nav>
+		<a class="btn btn--primary btn--sm" href="/#get">Get the app</a>
+	</header>
+
+	<main id="main">
+		<section class="section">
+			<header class="section__head">
+				<span class="chip chip--violet">Legal</span>
+				<h2>Terms of use</h2>
+				<p>
+					Karo is a task manager you talk to. These terms cover what you can expect from
+					it and what we expect from you.
+				</p>
+			</header>
+
+			<div class="card-grid card-grid--3">
+				<article class="card">
+					<span class="card__icon">&#128230;</span>
+					<h3>The license</h3>
+					<p>
+						You get a personal, non-exclusive license to install and use Karo on devices
+						you control. You may not resell it, reverse engineer it for a competing
+						product, or use it to break the law.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#9881;&#65039;</span>
+					<h3>Pro and billing</h3>
+					<p>
+						Pro costs $4.99 a month and covers rant parsing and cloud backup of your
+						recordings. It is billed through the app store, renew monthly, and you can
+						cancel whenever. Downgrading keeps your data on device.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#127952;</span>
+					<h3>Your content</h3>
+					<p>
+						The rants, tasks and notes you put into Karo are yours. You confirm you have
+						the right to speak them, and you own the parsed items Karo produces from
+						them.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#9997;&#65039;</span>
+					<h3>Accuracy, no promises</h3>
+					<p>
+						Extraction is a draft, not a judgment. Karo shows you what it found before
+						anything is saved precisely because it can mishear or misfile things. Always
+						review before you trust the list.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#128719;&#65039;</span>
+					<h3>Availability</h3>
+					<p>
+						The basic tier runs without our servers and works offline. Pro features that
+						use our services can go down for maintenance. If we ever shut those services
+						down, we will give reasonable warning.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#9878;&#65039;</span>
+					<h3>Liability</h3>
+					<p>
+						Karo is offered as is. We are not liable for the missed reminder, the missed
+						dentist appointment or anything else that happens because a list forgot
+						itself. Your data is covered separately by the <a
+						href="/legal/privacy">privacy policy</a>.
+					</p>
+				</article>
+			</div>
+
+			<div class="center">
+				<p class="footer__note">
+					Questions about these terms? Reach us from the
+					<a href="/about">about page</a>. See also the <a href="/legal/privacy">privacy policy</a>.
+				</p>
+			</div>
+		</section>
+	</main>
+
+	{{ template "footer" . }}
+</body>
+
+</html>
+{{- end -}}

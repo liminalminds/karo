@@ -1,0 +1,117 @@
+{{- define "privacy" -}}
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<title>Privacy | Karo</title>
+	<meta name="description" content="How Karo handles your data: what stays on device, what a recording request sends, and what Karo never collects.">
+	<link rel="icon" href="/static/img/logo.png">
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+	<a class="skip" href="#main">Skip to content</a>
+
+	<header class="nav">
+		<a class="nav__brand" href="/">
+			<img class="nav__img" src="/static/img/logo.png" alt="Karo Logo">
+			<span>Karo</span>
+		</a>
+		<nav class="nav__links">
+			<a href="/about">About</a>
+			<a href="/pricing">Pricing</a>
+			<a href="/#faq">FAQ</a>
+		</nav>
+		<a class="btn btn--primary btn--sm" href="/#get">Get the app</a>
+	</header>
+
+	<main id="main">
+		<section class="section">
+			<header class="section__head">
+				<span class="chip chip--violet">Legal</span>
+				<h2>Privacy policy</h2>
+				<p>
+					The short version: your lists live on your device, and only a recording you
+					explicitly send for analysis ever leaves it.
+				</p>
+			</header>
+
+			<div class="card-grid card-grid--3">
+				<article class="card">
+					<span class="card__icon">&#128190;</span>
+					<h3>What stays on device</h3>
+					<p>
+						Your tasks, habits, tags, reminders, history and voice notes are stored in a
+						database on the device. Karo has no server account to sign into and keeps no
+						copy of them anywhere else.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#127908;</span>
+					<h3>What leaves the device</h3>
+					<p>
+						Exactly one thing, on purpose: a recording you explicitly send for analysis.
+						That audio is used to produce the transcript and candidate items, is kept only
+						long enough to answer, and is not used to advertise to you or train a general
+						model on your rants.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#128683;</span>
+					<h3>What Karo never does</h3>
+					<p>
+						No accounts, no contact lists, no location tracking, no third-party ad or
+						tracking SDKs, no selling of data. There is nothing about you to sell because
+						we never collected it.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#9881;&#65039;</span>
+					<h3>The on-device transcript</h3>
+					<p>
+						The transcript is produced on device. What you read in the app while editing a
+						draft never needed a round trip, and once you confirm the items the recording
+						itself can be deleted from inside the app.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#9878;&#65039;</span>
+					<h3>Analysis is the paid part</h3>
+					<p>
+						The app runs on its own. Analysis of recordings is the only feature that costs
+						Karo anything to serve, which is why it is the only paid feature. Payments are
+						handled by the app store and Karo does not receive or store card details.
+					</p>
+				</article>
+
+				<article class="card">
+					<span class="card__icon">&#128230;</span>
+					<h3>Deleting your data</h3>
+					<p>
+						Uninstalling the app removes the on-device database. Because there is no server
+						side account, there is no lingering profile to request deletion of &mdash; the
+						data goes when the app goes.
+					</p>
+				</article>
+			</div>
+
+			<div class="center">
+				<p class="footer__note">
+					Questions about this policy? Reach us from the
+					<a href="/about">about page</a>. See also the <a href="/legal/terms">terms of use</a>.
+				</p>
+			</div>
+		</section>
+	</main>
+
+	{{ template "footer" . }}
+</body>
+
+</html>
+{{- end -}}
